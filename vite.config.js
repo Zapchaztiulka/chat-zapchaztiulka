@@ -8,6 +8,8 @@ import autoprefixer from 'autoprefixer';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), svgr()],
+
+  base: '/chat-zapchaztiulka/',
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],
