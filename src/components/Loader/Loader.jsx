@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import { ColorRing } from 'react-loader-spinner';
+import './styles.css';
 
 export const Loader = ({ isVisible }) => {
   if (isVisible) {
     return (
-      <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center opacity-60">
+      <div className="wrapper-loader">
         <ColorRing
           colors={[
             'rgba(239, 248, 255, 1)',

@@ -3,8 +3,15 @@ export default {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        tablet: '600px',
+        desktop: '1200px',
+      },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+      },
+      fontSize: {
+        xxs: '10px',
       },
       colors: {
         mainColors: {
@@ -28,13 +35,13 @@ export default {
           warningLight: 'rgba(255, 250, 235, 1)',
           pressedGrey: 'rgba(209, 233, 255, 1)',
           pressedBlue: 'rgba(83, 177, 253, 1)',
-          pressedDesctructive: 'rgba(249, 112, 102, 1)',
+          pressedDestructive: 'rgba(249, 112, 102, 1)',
           hover: 'rgba(255, 255, 255, 1)',
           hoverGrey: 'rgba(239, 248, 255, 1)',
           hoverBlue: 'rgba(24, 73, 169, 1)',
-          hoverDesctructive: 'rgba(145, 32, 24, 1)',
+          hoverDestructive: 'rgba(145, 32, 24, 1)',
           defaultBlue: 'rgba(21, 112, 239, 1)',
-          defaultDesctructive: 'rgba(217, 45, 32, 1)',
+          defaultDestructive: 'rgba(217, 45, 32, 1)',
           img: 'rgba(249, 249, 249, 1)',
           disable: 'rgba(249, 249, 249, 1)',
         },
@@ -89,6 +96,9 @@ export default {
         xl3: '64px',
         xl4: '72px',
       },
+      letterSpacing: {
+        button: '-0.2px',
+      },
       borderRadius: {
         zero: '0px',
         minimal: '4px',
@@ -97,6 +107,9 @@ export default {
         medium3: '20px',
         large: '24px',
         large2: '32px',
+      },
+      dropShadow: {
+        focusButton: '0px 0px 4px #2E90FA',
       },
     },
   },

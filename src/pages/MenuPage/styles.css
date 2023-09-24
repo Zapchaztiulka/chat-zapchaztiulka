@@ -1,0 +1,14 @@
+.welcome {
+  @apply font-sans font-medium text-sm tablet:text-base desktop:text-2xl
+   tracking-button text-textColors-primary flex flex-col items-center;
+}
+
+.nav-wrapper {
+  @apply flex flex-col gap-5 py-5;
+}
+
+.nav-link {
+  @apply font-sans font-medium text-sm tablet:text-base desktop:text-2xl
+   tracking-button text-textColors-primary p-3 border border-solid
+   border-borderColors-default rounded-medium;
+}
