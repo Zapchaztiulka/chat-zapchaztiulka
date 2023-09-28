@@ -5,9 +5,22 @@ import { ArrowDownIcon } from '../../images/svg';
 import tailwindcss from '../../../tailwind.config.js';
 import './styles.css';
 
-export const TertiaryBtnWithArrow = ({ children, to, disabled, pressed }) => {
+export const TertiaryBtnWithArrow = ({
+  children,
+  to,
+  disabled,
+  pressed,
+  onClick,
+}) => {
   const navigate = useNavigate();
   const tailwindColors = tailwindcss.theme.extend.colors;
+
+  const handleButtonClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    navigate(to);
+  };
 
   return !disabled ? (
     <button
@@ -15,7 +28,7 @@ export const TertiaryBtnWithArrow = ({ children, to, disabled, pressed }) => {
       style={{
         backgroundColor: pressed && tailwindColors.bgColors.pressedGrey,
       }}
-      onClick={() => navigate(to)}
+      onClick={handleButtonClick}
     >
       {children}
       <ArrowDownIcon colorFill={tailwindColors.iconColors.brand} />
@@ -33,4 +46,5 @@ TertiaryBtnWithArrow.propTypes = {
   to: PropTypes.string,
   disabled: PropTypes.bool,
   pressed: PropTypes.bool,
+  onClick: PropTypes.func,
 };

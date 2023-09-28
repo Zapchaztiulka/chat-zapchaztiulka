@@ -28,7 +28,7 @@ const ButtonExamples = () => {
 
   return (
     <Container>
-      <div className="flex flex-wrap gap-5">
+      <div className="flex flex-wrap gap-5 pt-10">
         <PrimaryBtn to="/">Button</PrimaryBtn>
         <PrimaryBtnWithIcon to="/">Button</PrimaryBtnWithIcon>
         <SecondaryBtn to="/">Button</SecondaryBtn>

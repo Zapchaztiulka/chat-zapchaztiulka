@@ -10,9 +10,17 @@ export const TertiaryBtnWithPhoneIcon = ({
   to,
   disabled,
   pressed,
+  onClick,
 }) => {
   const navigate = useNavigate();
   const tailwindColors = tailwindcss.theme.extend.colors;
+
+  const handleButtonClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    navigate(to);
+  };
 
   return !disabled ? (
     <button
@@ -20,7 +28,7 @@ export const TertiaryBtnWithPhoneIcon = ({
       style={{
         backgroundColor: pressed && tailwindColors.bgColors.pressedGrey,
       }}
-      onClick={() => navigate(to)}
+      onClick={handleButtonClick}
     >
       <PhoneIcon colorFill={tailwindColors.iconColors.primary} />
       {children}
@@ -38,4 +46,5 @@ TertiaryBtnWithPhoneIcon.propTypes = {
   to: PropTypes.string,
   disabled: PropTypes.bool,
   pressed: PropTypes.bool,
+  onClick: PropTypes.func,
 };

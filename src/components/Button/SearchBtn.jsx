@@ -5,9 +5,16 @@ import { SearchIcon } from '../../images/svg';
 import tailwindcss from '../../../tailwind.config.js';
 import './styles.css';
 
-export const SearchBtn = ({ to, disabled, pressed }) => {
+export const SearchBtn = ({ to, disabled, pressed, onClick }) => {
   const navigate = useNavigate();
   const tailwindColors = tailwindcss.theme.extend.colors;
+
+  const handleButtonClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    navigate(to);
+  };
 
   return !disabled ? (
     <button
@@ -15,7 +22,7 @@ export const SearchBtn = ({ to, disabled, pressed }) => {
       style={{
         backgroundColor: pressed && tailwindColors.bgColors.pressedBlue,
       }}
-      onClick={() => navigate(to)}
+      onClick={handleButtonClick}
     >
       <SearchIcon colorFill={tailwindColors.iconColors.contrast} />
     </button>
@@ -30,4 +37,5 @@ SearchBtn.propTypes = {
   to: PropTypes.string,
   disabled: PropTypes.bool,
   pressed: PropTypes.bool,
+  onClick: PropTypes.func,
 };

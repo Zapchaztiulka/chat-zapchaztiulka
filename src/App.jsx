@@ -1,6 +1,7 @@
-import { Route, Routes } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-// import socketIO from 'socket.io-client';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { lazy, Suspense, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { nanoid } from 'nanoid';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,11 +17,28 @@ const OrderDetailsPage = lazy(() => import('./pages/OrderDetailsPage'));
 const ChatPage = lazy(() => import('./pages/ChatPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
+import { createChatRoom } from './redux/chat/operations';
+
 const ButtonExamples = lazy(() => import('./pages/ButtonExamples.jsx')); // видалити
 
-// const socket = socketIO.connect('https://spares-backend-i2mq.onrender.com');
-
 export const App = () => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const userIdParam = searchParams.get('userId');
+    const storedUserId = localStorage.getItem('userId') || nanoid(24);
+
+    if (userIdParam) {
+      localStorage.setItem('userId', userIdParam);
+      dispatch(createChatRoom(userIdParam));
+    } else {
+      localStorage.setItem('userId', storedUserId);
+      dispatch(createChatRoom(storedUserId));
+    }
+  }, [dispatch, location.search]);
+
   return (
     <>
       <Suspense fallback={<Loader />}>

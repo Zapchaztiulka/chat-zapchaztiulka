@@ -5,9 +5,22 @@ import { ShopCartIcon } from '../../images/svg';
 import tailwindcss from '../../../tailwind.config.js';
 import './styles.css';
 
-export const DestructiveBtnWithIcon = ({ children, to, disabled, pressed }) => {
+export const DestructiveBtnWithIcon = ({
+  children,
+  to,
+  disabled,
+  pressed,
+  onClick,
+}) => {
   const navigate = useNavigate();
   const tailwindColors = tailwindcss.theme.extend.colors;
+
+  const handleButtonClick = () => {
+    if (onClick) {
+      onClick();
+    }
+    navigate(to);
+  };
 
   return !disabled ? (
     <button
@@ -15,7 +28,7 @@ export const DestructiveBtnWithIcon = ({ children, to, disabled, pressed }) => {
       style={{
         backgroundColor: pressed && tailwindColors.bgColors.pressedDestructive,
       }}
-      onClick={() => navigate(to)}
+      onClick={handleButtonClick}
     >
       <ShopCartIcon colorFill={tailwindColors.iconColors.contrast} />
       {children}
@@ -33,4 +46,5 @@ DestructiveBtnWithIcon.propTypes = {
   to: PropTypes.string,
   disabled: PropTypes.bool,
   pressed: PropTypes.bool,
+  onClick: PropTypes.func,
 };
