@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-// axios.defaults.baseURL = 'https://spares-backend-i2mq.onrender.com/api';
-axios.defaults.baseURL = 'http://localhost:5000/api';
+// axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
-export const createChatRoom = createAsyncThunk(
-  'chat',
+export const authUser = createAsyncThunk(
+  'chat/authUser',
   async (userId, thunkAPI) => {
     try {
-      const { data } = await axios.post('/chats', { userId });
+      const { data } = await axios.post('/chats/auth', { userId });
       return data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -16,12 +16,26 @@ export const createChatRoom = createAsyncThunk(
   }
 );
 
-export const closeChat = createAsyncThunk(
-  'chat/closeChat',
-  async (chatRoomId, thunkAPI) => {
+export const createChatRoom = createAsyncThunk(
+  'chat/createChatRoom',
+  async (userId, thunkAPI) => {
     try {
-      const { data } = await axios.patch(`/chats/${chatRoomId}`);
-      return data.message;
+      const { data } = await axios.post('/chats/chatRoom', { userId });
+      return data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const closeChatRoom = createAsyncThunk(
+  'chat/closeChat',
+  async ({ chatRoomId, userId }, thunkAPI) => {
+    try {
+      const { data } = await axios.patch(`/chats/chatRoom/${chatRoomId}`, {
+        userId,
+      });
+      return data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }

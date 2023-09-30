@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createChatRoom, closeChat } from './operations';
+import { authUser, createChatRoom, closeChatRoom } from './operations';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -10,24 +10,12 @@ const handleRejected = (state, { payload }) => {
 };
 
 const initialState = {
-  chatRoom: {
-    userId: '',
-    username: '',
-    userPhone: '',
-    managerId: '',
-    messages: [
-      {
-        messageOwner: '',
-        message: '',
-      },
-    ],
-    chatStatus: null,
-    chatRating: 0,
-    chatFeedback: '',
-    createdAt: null,
-    updatedAt: null,
-    token: null,
-  },
+  userId: null,
+  username: null,
+  userPhone: null,
+  token: null,
+  chatRooms: [],
+  createdAt: null,
   isLoading: false,
   error: null,
 };
@@ -38,24 +26,36 @@ export const chatSlice = createSlice({
 
   extraReducers: builder => {
     builder
+      .addCase(authUser.pending, handlePending)
+      .addCase(authUser.fulfilled, (state, { payload }) => {
+        Object.assign(state, payload);
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(authUser.rejected, handleRejected)
+
       .addCase(createChatRoom.pending, handlePending)
       .addCase(createChatRoom.fulfilled, (state, { payload }) => {
-        state.chatRoom = {
-          ...state.chatRoom,
-          ...payload,
-        };
+        state.chatRooms.push(payload);
         state.isLoading = false;
         state.error = null;
       })
       .addCase(createChatRoom.rejected, handleRejected)
 
-      .addCase(closeChat.pending, handlePending)
-      .addCase(closeChat.fulfilled, state => {
-        state.chatRoom.chatStatus = 'completed';
+      .addCase(closeChatRoom.pending, handlePending)
+      .addCase(closeChatRoom.fulfilled, (state, { payload }) => {
+        const roomIndex = state.chatRooms.findIndex(
+          room => room._id === payload.roomId
+        );
+
+        if (roomIndex !== -1) {
+          state.chatRooms[roomIndex].chatRoomStatus = 'completed';
+        }
+
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(closeChat.rejected, handleRejected);
+      .addCase(closeChatRoom.rejected, handleRejected);
   },
 });
 

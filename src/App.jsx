@@ -5,9 +5,6 @@ import { nanoid } from 'nanoid';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-// import PrivateRoute from 'routes/PrivateRoute';
-// import PublicRoute from 'routes/PublicRoute';
-
 import { Loader } from './components/Loader';
 import { Header } from './components/NavBar';
 
@@ -17,7 +14,7 @@ const OrderDetailsPage = lazy(() => import('./pages/OrderDetailsPage'));
 const ChatPage = lazy(() => import('./pages/ChatPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
-import { createChatRoom } from './redux/chat/operations';
+import { authUser } from './redux/chat/operations';
 
 const ButtonExamples = lazy(() => import('./pages/ButtonExamples.jsx')); // видалити
 
@@ -32,10 +29,10 @@ export const App = () => {
 
     if (userIdParam) {
       localStorage.setItem('userId', userIdParam);
-      dispatch(createChatRoom(userIdParam));
+      dispatch(authUser(userIdParam));
     } else {
       localStorage.setItem('userId', storedUserId);
-      dispatch(createChatRoom(storedUserId));
+      dispatch(authUser(storedUserId));
     }
   }, [dispatch, location.search]);
 
