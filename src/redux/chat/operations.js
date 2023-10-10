@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-// axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 export const authUser = createAsyncThunk(

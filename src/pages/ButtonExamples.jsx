@@ -57,6 +57,7 @@ const ButtonExamples = () => {
             color={tailwindExtend.colors.iconColors.contrast}
           />
         </PrimaryBtn>
+        `{' '}
         <PrimaryBtn disabled>
           <BtnLoader
             height={isSmallScreen ? 16 : 24}
@@ -65,6 +66,7 @@ const ButtonExamples = () => {
             color={tailwindExtend.colors.iconColors.disabled}
           />
         </PrimaryBtn>
+        `
       </div>
     </Container>
   );

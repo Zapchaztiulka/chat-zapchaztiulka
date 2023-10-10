@@ -17,8 +17,6 @@ import {
 import { closeChatRoom, createChatRoom } from '../../redux/chat/operations';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-// const socket = socketIO.connect(BACKEND_URL);
 const socket = socketIO.connect(BACKEND_URL);
 
 export const ChatPage = () => {
@@ -38,15 +36,30 @@ export const ChatPage = () => {
     if (!chatRoomInProgress) {
       dispatch(createChatRoom(userId))
         .then(data => {
-          setChatRoomData(data);
+          const { payload } = data;
+          setChatRoomData(payload);
+
+          socket.emit('newChat', { chatRoom: payload });
         })
         .catch(() => {
-          toast.info('Chat room was not created. Try again');
+          toast.info('Помилка входу в чат. Спробуйте повторити');
         });
     } else {
       setChatRoomData(chatRoomInProgress);
+
+      socket.emit('newChat', { chatRoom: chatRoomInProgress });
     }
   }, [chatRoomInProgress, dispatch, storedToken, userId]);
+
+  useEffect(() => {
+    socket.on('userStatusChanged', ({ userId, isOnline }) => {
+      dispatch({ type: 'UPDATE_USER_STATUS', payload: { userId, isOnline } });
+    });
+
+    return () => {
+      socket.off('userStatusChanged');
+    };
+  }, [dispatch]);
 
   const handleCloseChat = () => {
     dispatch(closeChatRoom({ chatRoomId: chatRoomInProgress._id, userId }));
@@ -55,11 +68,11 @@ export const ChatPage = () => {
 
   return (
     <Container>
-      <div className="flex flex-col gap-5 pt-5 items-start">
+      <div className="flex flex-col gap-5 pt-5">
         {isLoading && <Loader />}
         {!isLoading && (
           <div className="flex flex-col gap-5">
-            {!chatRoomInProgress.managerId && (
+            {!chatRoomInProgress?.managerId && (
               <WelcomeMsg
                 username={chat.username}
                 date={chatRoomData.createdAt}
@@ -67,10 +80,12 @@ export const ChatPage = () => {
             )}
           </div>
         )}
-        <SecondaryBtn to="/">Повернутися до меню</SecondaryBtn>
-        <DestructiveBtn to="/" onClick={handleCloseChat}>
-          Завершити розмову
-        </DestructiveBtn>
+        <div className="flex gap-5">
+          <SecondaryBtn to="/">Головне меню</SecondaryBtn>
+          <DestructiveBtn to="/" onClick={handleCloseChat}>
+            Завершити чат
+          </DestructiveBtn>
+        </div>
       </div>
     </Container>
   );

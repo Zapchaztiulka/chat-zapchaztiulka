@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Loader } from './components/Loader';
-import { Header } from './components/NavBar';
+import { Header } from './components/Header';
 
 const MenuPage = lazy(() => import('./pages/MenuPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { authUser, createChatRoom, closeChatRoom } from './operations';
+import { updateUserStatus } from './actions';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -7,6 +8,7 @@ const handlePending = state => {
 const handleRejected = (state, { payload }) => {
   state.isLoading = false;
   state.error = payload;
+  state.isOnline = false;
 };
 
 const initialState = {
@@ -14,6 +16,7 @@ const initialState = {
   username: null,
   userPhone: null,
   token: null,
+  isOnline: false,
   chatRooms: [],
   createdAt: null,
   isLoading: false,
@@ -37,6 +40,7 @@ export const chatSlice = createSlice({
       .addCase(createChatRoom.pending, handlePending)
       .addCase(createChatRoom.fulfilled, (state, { payload }) => {
         state.chatRooms.push(payload);
+        state.isOnline = true;
         state.isLoading = false;
         state.error = null;
       })
@@ -52,10 +56,15 @@ export const chatSlice = createSlice({
           state.chatRooms[roomIndex].chatRoomStatus = 'completed';
         }
 
+        state.isOnline = false;
         state.isLoading = false;
         state.error = null;
       })
-      .addCase(closeChatRoom.rejected, handleRejected);
+      .addCase(closeChatRoom.rejected, handleRejected)
+
+      .addCase(updateUserStatus, (state, { payload }) => {
+        state.isOnline = payload.isOnline;
+      });
   },
 });
 

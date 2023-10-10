@@ -1,12 +1,12 @@
 .prime {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold p-xs text-base leading-6 tracking-button
        text-textColors-contrast  bg-bgColors-defaultBlue hover:bg-bgColors-hoverBlue 
        focus:outline-none focus:drop-shadow-focusButton rounded-medium transition-colors 
        duration-300;
 }
 
 .prime-disabled {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold p-xs text-base leading-6 tracking-button
        text-textColors-disabled bg-bgColors-disable rounded-medium cursor-not-allowed;
 }
 
