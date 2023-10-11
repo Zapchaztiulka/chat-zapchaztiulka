@@ -1,13 +1,19 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import './styles.css';
 
-import { Container } from '../../utils';
-import { isOnlineChat } from '../../helpers';
-import logo from '../../images/svg/logo/White/96px.svg';
-import tailwindcss from '../../../tailwind.config';
-const tailwindExtend = tailwindcss.theme.extend;
+import logo from '../../images/svg/logo/White/44px.svg';
+import { ArrowDownIcon } from '../../images/svg';
 
 export const Header = () => {
+  const [chatVisible, setChatVisible] = useState(true);
+
+  const toggleChatVisibility = () => {
+    setChatVisible(!chatVisible);
+  };
+
+  const arrowIconRotate = chatVisible ? 'arrow-down' : 'arrow-up';
+
   return (
     <>
       <header className="header-wrapper">
@@ -16,22 +22,12 @@ export const Header = () => {
         </div>
         <div className="second-wrapper">
           <div className="title">Онлайн підтримка</div>
-          <div
-            className="availability"
-            style={{
-              backgroundColor:
-                isOnlineChat &&
-                tailwindExtend.colors.bgColors.pressedDestructive,
-              color: isOnlineChat && tailwindExtend.colors.textColors.error,
-            }}
-          >
-            {isOnlineChat ? 'Ми оффлайн' : 'Ми онлайн'}
-          </div>
+          <button className={arrowIconRotate} onClick={toggleChatVisibility}>
+            <ArrowDownIcon />
+          </button>
         </div>
       </header>
-      <Container>
-        <Outlet />
-      </Container>
+      {chatVisible && <Outlet />}
     </>
   );
 };

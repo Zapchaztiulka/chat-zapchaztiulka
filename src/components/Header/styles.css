@@ -1,10 +1,10 @@
 .header-wrapper {
   @apply flex gap-2 desktop:gap-4 sticky top-0 left-0 z-20 items-center 
-  mx-auto py-3 desktop:py-5 px-4 tablet:px-6 desktop:px-28 w-screen bg-bgColors-brandDark;
+  mx-auto py-2 px-6 tablet:py-3 tablet:px-7 desktop:py-4 desktop:px-8 w-screen bg-bgColors-brandDark;
 }
 
 .second-wrapper {
-  @apply flex flex-col gap-1;
+  @apply flex w-full justify-between items-center;
 }
 
 .logo-wrapper {
@@ -12,12 +12,14 @@
 }
 
 .title {
-  @apply font-sans font-medium text-sm tablet:text-base desktop:text-2xl
+  @apply font-sans font-medium text-lg tablet:text-2xl desktop:text-3xl
    tracking-button text-textColors-contrast;
 }
 
-.availability {
-  @apply font-sans font-medium text-xxs tablet:text-sm desktop:text-xl
-   tracking-button rounded-medium3 bg-bgColors-successDark 
-   text-textColors-success py-xs3 px-xs2 mr-auto my-0;
+.arrow-up {
+  @apply rotate-180 transition-transform;
+}
+
+.arrow-down {
+  @apply rotate-0 transition-transform;
 }

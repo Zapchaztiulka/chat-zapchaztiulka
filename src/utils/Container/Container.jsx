@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import './styles.css';
 
 export const Container = ({ children }) => {
-  return <div className="wrapper">{children}</div>;
+  return <main className="wrapper">{children}</main>;
 };
 
 Container.propTypes = {

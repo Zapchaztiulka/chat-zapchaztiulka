@@ -1,2 +1,2 @@
-export * from './isOnlineChat';
 export * from './formatDate';
+export * from './themeTailwind';

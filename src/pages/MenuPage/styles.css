@@ -1,14 +1,12 @@
-.welcome {
-  @apply font-sans font-medium text-sm tablet:text-base desktop:text-2xl
-   tracking-button text-textColors-primary flex flex-col items-center;
-}
-
 .nav-wrapper {
-  @apply flex flex-col gap-5 py-5;
+  @apply flex flex-col gap-3 py-5;
 }
 
+.nav-link-wrapper {
+  @apply font-sans font-medium text-sm tracking-button
+   text-textColors-brand flex flex-col gap-2;
+}
 .nav-link {
-  @apply font-sans font-medium text-sm tablet:text-base desktop:text-2xl
-   tracking-button text-textColors-primary p-3 border border-solid
-   border-borderColors-default rounded-medium;
+  @apply w-fit px-3 py-2 border border-solid border-borderColors-defaultBlue
+   hover:bg-bgColors-hoverGrey rounded-medium;
 }

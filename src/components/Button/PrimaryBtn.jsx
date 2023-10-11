@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import tailwindcss from '../../../tailwind.config.js';
+import { bgColors } from '../../helpers';
 import './styles.css';
 
 export const PrimaryBtn = ({ children, to, disabled, pressed, onClick }) => {
   const navigate = useNavigate();
-  const tailwindColors = tailwindcss.theme.extend.colors;
 
   const handleButtonClick = () => {
     if (onClick) {
@@ -19,7 +18,7 @@ export const PrimaryBtn = ({ children, to, disabled, pressed, onClick }) => {
     <button
       className="prime"
       style={{
-        backgroundColor: pressed && tailwindColors.bgColors.pressedBlue,
+        backgroundColor: pressed && bgColors.pressedBlue,
       }}
       onClick={handleButtonClick}
     >
