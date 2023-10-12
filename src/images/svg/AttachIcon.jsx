@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 
-const AttachIcon = ({ colorFill }) => (
+import { iconColors } from '../../helpers';
+
+const AttachIcon = ({ colorFill = iconColors.primary }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"

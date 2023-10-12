@@ -1,12 +1,12 @@
 .input-style {
-  @apply p-xs pr-20 w-full border border-solid 
-   border-borderColors-default rounded-minimal outline-none
+  @apply p-xs pr-20 w-full border-y border-solid resize-y overflow-y-auto
+   border-borderColors-default outline-none cursor-pointer
    hover:bg-bgColors-hoverGrey hover:border-borderColors-active
    focus:border-borderColors-default focus:drop-shadow-focusButton;
 }
 
 .icon-style {
-  @apply absolute right-11 top-1/2 transform -translate-y-1/2;
+  @apply absolute right-xs top-1/2 transform -translate-y-1/2;
 }
 
 @keyframes fade-in {

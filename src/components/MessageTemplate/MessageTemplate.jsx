@@ -32,5 +32,5 @@ export const MessageTemplate = ({
 MessageTemplate.propTypes = {
   owner: PropTypes.string,
   text: PropTypes.string,
-  time: PropTypes.string.isRequired,
+  time: PropTypes.string,
 };

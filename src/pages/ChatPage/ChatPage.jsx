@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import socketIO from 'socket.io-client';
 import { toast } from 'react-toastify';
 
 import { Container } from '../../utils';
@@ -17,10 +17,7 @@ import {
 } from '../../components/MessageTemplate';
 import { Footer } from '../../components/Footer';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const socket = socketIO.connect(BACKEND_URL);
-
-export const ChatPage = () => {
+export const ChatPage = ({ socket }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectIsLoading);
   const storedToken = useSelector(selectToken);
@@ -42,7 +39,7 @@ export const ChatPage = () => {
     } else {
       socket.emit('newChat', { chatRoom: chatRoomInProgress });
     }
-  }, [chatRoomInProgress, dispatch, storedToken, userId]);
+  }, [chatRoomInProgress, dispatch, socket, storedToken, userId]);
 
   useEffect(() => {
     socket.on('userStatusChanged', ({ userId, isOnline }) => {
@@ -52,7 +49,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('userStatusChanged');
     };
-  }, [dispatch]);
+  }, [dispatch, socket]);
 
   return (
     <div>
@@ -70,4 +67,8 @@ export const ChatPage = () => {
       <Footer />
     </div>
   );
+};
+
+ChatPage.propTypes = {
+  socket: PropTypes.object.isRequired,
 };
