@@ -27,6 +27,21 @@ export const createChatRoom = createAsyncThunk(
   }
 );
 
+// export const addMessage = createAsyncThunk(
+//   'chat/addMessage',
+//   async ({ chatRoomId, userId, message }, thunkAPI) => {
+//     try {
+//       const { data } = await axios.patch(`/chats/addMessage/${chatRoomId}`, {
+//         userId,
+//         message,
+//       });
+//       return data;
+//     } catch (e) {
+//       return thunkAPI.rejectWithValue(e.message);
+//     }
+//   }
+// );
+
 export const closeChatRoom = createAsyncThunk(
   'chat/closeChat',
   async ({ chatRoomId, userId }, thunkAPI) => {
@@ -40,3 +55,16 @@ export const closeChatRoom = createAsyncThunk(
     }
   }
 );
+
+export const sendFile = async formData => {
+  try {
+    const { data } = await axios.post('/chats/uploadChatImage', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return data;
+  } catch (e) {
+    return e.message;
+  }
+};

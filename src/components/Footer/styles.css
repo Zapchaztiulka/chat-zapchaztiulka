@@ -1,8 +1,12 @@
 .input-style {
-  @apply p-xs pr-20 w-full border-y border-solid resize-y overflow-y-auto
-   border-borderColors-default outline-none cursor-pointer
-   hover:bg-bgColors-hoverGrey hover:border-borderColors-active
+  @apply p-xs pr-20 w-full resize-y overflow-y-auto outline-none cursor-pointer
+  hover:bg-bgColors-hoverGrey hover:border-borderColors-active
+   border-t border-solid border-borderColors-default 
    focus:border-borderColors-default focus:drop-shadow-focusButton;
+}
+
+.input-style::-webkit-resizer {
+  @apply outline-none;
 }
 
 .icon-style {

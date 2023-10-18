@@ -1,36 +1,54 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import './styles.css';
 
 import logo from '../../images/svg/logo/White/44px.svg';
 import { ArrowDownIcon } from '../../images/svg';
+import { selectChatRoomInProgress } from '../../redux/chat/selectors';
+import { updateIsChatRoomOpen } from '../../redux/chat/actions';
 
 export const Header = ({ socket }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [chatVisible, setChatVisible] = useState(true);
+  const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const userId = localStorage.getItem('userId');
 
+  // handle changing of active chat when user unfolded or rolled up it
   const toggleChatVisibility = () => {
     setChatVisible(!chatVisible);
   };
 
+  // deliver an event by sockets when chat is rolling up or unfolding
   useEffect(() => {
-    if (location.pathname !== '/') {
+    if (location.pathname !== '/' && chatRoomInProgress) {
+      const chatRoomOpenChanged = {
+        userId,
+        roomId: chatRoomInProgress._id,
+        isChatRoomOpen: chatVisible,
+      };
+
       if (chatVisible) {
-        socket.emit('chatMinimized', { userId, isOnline: true });
+        socket.emit('chatRoomOpenChanged', chatRoomOpenChanged);
       } else {
-        socket.emit('chatMinimized', { userId, isOnline: false });
+        socket.emit('chatRoomOpenChanged', chatRoomOpenChanged);
       }
 
       dispatch({
-        type: 'UPDATE_USER_STATUS',
-        payload: { userId, isOnline: chatVisible },
+        type: updateIsChatRoomOpen,
+        payload: chatRoomOpenChanged,
       });
     }
-  }, [dispatch, chatVisible, userId, socket, location.pathname]);
+  }, [
+    chatRoomInProgress,
+    chatVisible,
+    dispatch,
+    location.pathname,
+    socket,
+    userId,
+  ]);
 
   return (
     <>

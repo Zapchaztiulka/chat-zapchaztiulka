@@ -1,6 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { authUser, createChatRoom, closeChatRoom } from './operations';
-import { updateUserStatus } from './actions';
+
+import {
+  authUser,
+  createChatRoom,
+  // addMessage,
+  closeChatRoom,
+} from './operations';
+import { updateUserStatus, updateIsChatRoomOpen, addMessage } from './actions';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -8,7 +14,6 @@ const handlePending = state => {
 const handleRejected = (state, { payload }) => {
   state.isLoading = false;
   state.error = payload;
-  state.isOnline = false;
 };
 
 const initialState = {
@@ -29,6 +34,7 @@ export const chatSlice = createSlice({
 
   extraReducers: builder => {
     builder
+      // slices to connect to database
       .addCase(authUser.pending, handlePending)
       .addCase(authUser.fulfilled, (state, { payload }) => {
         Object.assign(state, payload);
@@ -54,6 +60,8 @@ export const chatSlice = createSlice({
 
         if (roomIndex !== -1) {
           state.chatRooms[roomIndex].chatRoomStatus = 'completed';
+          state.chatRooms[roomIndex].isChatRoomOpen = false;
+          // state.chatRooms[roomIndex].isChatRoomProcessed = false;
         }
 
         state.isOnline = false;
@@ -62,8 +70,34 @@ export const chatSlice = createSlice({
       })
       .addCase(closeChatRoom.rejected, handleRejected)
 
+      // slices to update only Redux state
+      .addCase(addMessage, (state, { payload }) => {
+        const { roomId, message } = payload;
+
+        state.chatRooms = state.chatRooms.map(room => {
+          if (room._id === roomId) {
+            return {
+              ...room,
+              messages: [...room.messages, message],
+            };
+          }
+          return room;
+        });
+      })
+
       .addCase(updateUserStatus, (state, { payload }) => {
         state.isOnline = payload.isOnline;
+      })
+
+      .addCase(updateIsChatRoomOpen, (state, { payload }) => {
+        const { roomId } = payload;
+        const roomIndex = state.chatRooms.findIndex(
+          room => room._id === roomId
+        );
+
+        if (roomIndex !== -1) {
+          state.chatRooms[roomIndex].isChatRoomOpen = payload.isChatRoomOpen;
+        }
       });
   },
 });

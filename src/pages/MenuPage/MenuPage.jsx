@@ -5,6 +5,7 @@ import './styles.css';
 import { selectChat } from '../../redux/chat/selectors';
 import { MessageTemplate } from '../../components/MessageTemplate';
 import { Container } from '../../utils';
+import { welcomeChatBot } from '../../helpers';
 
 export const MenuPage = () => {
   const chat = useSelector(selectChat);
@@ -12,7 +13,11 @@ export const MenuPage = () => {
   return (
     <Container>
       <nav className="nav-wrapper">
-        <MessageTemplate time={chat?.createdAt} />
+        <MessageTemplate
+          type="text"
+          text={welcomeChatBot}
+          time={chat.createdAt}
+        />
         <div className="nav-link-wrapper">
           <NavLink className="nav-link" to="/faq">
             Найпоширеніші запитання
