@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { socket } from '../../socket';
 
 import './styles.css';
 import { Footer } from '../../components/Footer';
@@ -9,17 +9,19 @@ import { MessageTemplate } from '../../components/MessageTemplate';
 import { Container } from '../../utils';
 import { welcomeStartChat } from '../../helpers';
 
-import { updateUserStatus } from '../../redux/chat/actions';
+import { updateUserStatus, updateManager } from '../../redux/chat/actions';
 import {
   selectToken,
   selectChatRoomInProgress,
 } from '../../redux/chat/selectors';
 import { createChatRoom } from '../../redux/chat/operations';
 
-export const ChatPage = ({ socket }) => {
+export const ChatPage = () => {
   const dispatch = useDispatch();
   const storedToken = useSelector(selectToken);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isManagerConnect, setIsManagerConnect] = useState(false);
+  const [isManagerDisconnect, setIsManagerDisconnect] = useState(false);
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const messageContainerRef = useRef(null);
   const userId = localStorage.getItem('userId');
@@ -28,7 +30,7 @@ export const ChatPage = ({ socket }) => {
   useEffect(() => {
     socket.emit('authentication', { token: storedToken });
     setIsAuthenticated(true);
-  }, [socket, storedToken]);
+  }, [storedToken]);
 
   // handle authentication error
   socket.on('authenticationError', ({ message }) => {
@@ -41,7 +43,7 @@ export const ChatPage = ({ socket }) => {
     if (!chatRoomInProgress) {
       dispatch(createChatRoom(userId));
     }
-  }, [chatRoomInProgress, dispatch, socket, userId]);
+  }, [chatRoomInProgress, dispatch, userId]);
 
   // update status in Redux store when user enters or quits
   useEffect(() => {
@@ -52,7 +54,32 @@ export const ChatPage = ({ socket }) => {
     return () => {
       socket.off('userStatusChanged');
     };
-  }, [dispatch, socket]);
+  }, [dispatch]);
+
+  // update Redux store after manager connection
+  useEffect(() => {
+    socket.on('managerJoinToChat', room => {
+      setIsManagerConnect(true);
+      dispatch({ type: updateManager, payload: room });
+    });
+
+    return () => {
+      socket.off('managerJoinToChat');
+    };
+  }, [dispatch]);
+
+  // when manager disconnect - Redux store is updated
+  useEffect(() => {
+    socket.on('disconnectManager', room => {
+      console.log('🚀 ~ file: ChatPage.jsx:74 ~ useEffect ~ room:', room);
+      setIsManagerDisconnect(true);
+      dispatch({ type: updateManager, payload: room });
+    });
+
+    return () => {
+      socket.off('disconnectManager');
+    };
+  }, [dispatch]);
 
   // automatic scroll when new message adds
   useEffect(() => {
@@ -106,13 +133,23 @@ export const ChatPage = ({ socket }) => {
                 />
               );
             })}
+          {isManagerConnect && (
+            <MessageTemplate
+              type="text"
+              text={`До чату приєднався менеджер ${chatRoomInProgress.managerName} ${chatRoomInProgress.managerSurname}`}
+              time={Date.now()}
+            />
+          )}
+          {isManagerDisconnect && (
+            <MessageTemplate
+              type="text"
+              text={`Менеджер ${chatRoomInProgress.managerName} ${chatRoomInProgress.managerSurname} від'єднався. Очікуйте підключення менеджера...`}
+              time={Date.now()}
+            />
+          )}
         </section>
       </Container>
-      <Footer socket={socket} />
+      <Footer />
     </div>
   );
-};
-
-ChatPage.propTypes = {
-  socket: PropTypes.object.isRequired,
 };

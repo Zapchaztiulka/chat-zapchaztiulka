@@ -1,15 +1,15 @@
-import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import './styles.css';
+import { socket } from '../../socket';
 
 import logo from '../../images/svg/logo/White/44px.svg';
 import { ArrowDownIcon } from '../../images/svg';
 import { selectChatRoomInProgress } from '../../redux/chat/selectors';
 import { updateIsChatRoomOpen } from '../../redux/chat/actions';
 
-export const Header = ({ socket }) => {
+export const Header = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [chatVisible, setChatVisible] = useState(true);
@@ -41,14 +41,7 @@ export const Header = ({ socket }) => {
         payload: chatRoomOpenChanged,
       });
     }
-  }, [
-    chatRoomInProgress,
-    chatVisible,
-    dispatch,
-    location.pathname,
-    socket,
-    userId,
-  ]);
+  }, [chatRoomInProgress, chatVisible, dispatch, location.pathname, userId]);
 
   return (
     <>
@@ -69,8 +62,4 @@ export const Header = ({ socket }) => {
       {chatVisible && <Outlet />}
     </>
   );
-};
-
-Header.propTypes = {
-  socket: PropTypes.object.isRequired,
 };

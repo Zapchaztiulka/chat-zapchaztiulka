@@ -6,7 +6,12 @@ import {
   // addMessage,
   closeChatRoom,
 } from './operations';
-import { updateUserStatus, updateIsChatRoomOpen, addMessage } from './actions';
+import {
+  updateUserStatus,
+  updateIsChatRoomOpen,
+  addMessage,
+  updateManager,
+} from './actions';
 
 const handlePending = state => {
   state.isLoading = true;
@@ -54,14 +59,14 @@ export const chatSlice = createSlice({
 
       .addCase(closeChatRoom.pending, handlePending)
       .addCase(closeChatRoom.fulfilled, (state, { payload }) => {
-        const roomIndex = state.chatRooms.findIndex(
-          room => room._id === payload.roomId
-        );
+        const roomIndex = state.chatRooms.findIndex(room => {
+          return room._id === payload.roomId;
+        });
 
         if (roomIndex !== -1) {
           state.chatRooms[roomIndex].chatRoomStatus = 'completed';
           state.chatRooms[roomIndex].isChatRoomOpen = false;
-          // state.chatRooms[roomIndex].isChatRoomProcessed = false;
+          state.chatRooms[roomIndex].isChatRoomProcessed = false;
         }
 
         state.isOnline = false;
@@ -85,15 +90,35 @@ export const chatSlice = createSlice({
         });
       })
 
+      .addCase(updateManager, (state, { payload }) => {
+        const {
+          _id: roomId,
+          managerId,
+          managerName,
+          managerSurname,
+          isChatRoomProcessed,
+        } = payload;
+
+        const roomIndex = state.chatRooms.findIndex(room => {
+          return room._id === roomId;
+        });
+
+        if (roomIndex !== -1) {
+          state.chatRooms[roomIndex].managerId = managerId;
+          state.chatRooms[roomIndex].managerName = managerName;
+          state.chatRooms[roomIndex].managerSurname = managerSurname;
+          state.chatRooms[roomIndex].isChatRoomProcessed = isChatRoomProcessed;
+        }
+      })
+
       .addCase(updateUserStatus, (state, { payload }) => {
         state.isOnline = payload.isOnline;
       })
 
       .addCase(updateIsChatRoomOpen, (state, { payload }) => {
-        const { roomId } = payload;
-        const roomIndex = state.chatRooms.findIndex(
-          room => room._id === roomId
-        );
+        const roomIndex = state.chatRooms.findIndex(room => {
+          return room._id === payload.roomId;
+        });
 
         if (roomIndex !== -1) {
           state.chatRooms[roomIndex].isChatRoomOpen = payload.isChatRoomOpen;

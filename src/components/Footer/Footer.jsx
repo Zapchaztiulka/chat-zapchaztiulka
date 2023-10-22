@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { socket } from '../../socket';
 
 import './styles.css';
 import { MenuIcon, AttachIcon, SendIcon } from '../../images/svg';
@@ -12,7 +12,7 @@ import { closeChatRoom, sendFile } from '../../redux/chat/operations';
 import { selectChatRoomInProgress } from '../../redux/chat/selectors';
 import { addMessage } from '../../redux/chat/actions';
 
-export const Footer = ({ socket }) => {
+export const Footer = () => {
   const dispatch = useDispatch();
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const [activeMenu, setActiveMenu] = useState(false);
@@ -62,7 +62,6 @@ export const Footer = ({ socket }) => {
         messageOwner: 'user',
         messageType: 'text',
         messageText: message,
-        createdAt: Date.now(),
       },
     };
 
@@ -77,7 +76,7 @@ export const Footer = ({ socket }) => {
     setRows(1);
   };
 
-  // send file for uploading to some Uploader and handle received data for rendering
+  // send file to some Uploader for uploading and handle received data for rendering
   const sendFileToServer = () => {
     if (selectedFile) {
       setIsLoading(true);
@@ -92,7 +91,6 @@ export const Footer = ({ socket }) => {
               messageOwner: 'user',
               messageType: 'image',
               messageText: data.imageURL,
-              createdAt: Date.now(),
             },
           };
 
@@ -222,8 +220,4 @@ export const Footer = ({ socket }) => {
       )}
     </>
   );
-};
-
-Footer.propTypes = {
-  socket: PropTypes.object.isRequired,
 };
