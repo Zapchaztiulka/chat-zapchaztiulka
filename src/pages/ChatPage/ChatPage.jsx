@@ -9,7 +9,11 @@ import { MessageTemplate } from '../../components/MessageTemplate';
 import { Container } from '../../utils';
 import { welcomeStartChat } from '../../helpers';
 
-import { updateUserStatus, updateManager } from '../../redux/chat/actions';
+import {
+  updateUserStatus,
+  updateManager,
+  addMessage,
+} from '../../redux/chat/actions';
 import {
   selectToken,
   selectChatRoomInProgress,
@@ -20,8 +24,6 @@ export const ChatPage = () => {
   const dispatch = useDispatch();
   const storedToken = useSelector(selectToken);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isManagerConnect, setIsManagerConnect] = useState(false);
-  const [isManagerDisconnect, setIsManagerDisconnect] = useState(false);
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const messageContainerRef = useRef(null);
   const userId = localStorage.getItem('userId');
@@ -59,27 +61,62 @@ export const ChatPage = () => {
   // update Redux store after manager connection
   useEffect(() => {
     socket.on('managerJoinToChat', room => {
-      setIsManagerConnect(true);
       dispatch({ type: updateManager, payload: room });
+
+      if (chatRoomInProgress) {
+        const { _id, managerName, managerSurname } = chatRoomInProgress;
+        const messageData = {
+          roomId: _id,
+          message: {
+            messageOwner: 'Бот',
+            messageType: 'text',
+            messageText: `До чату приєднався менеджер ${managerName} ${managerSurname}`,
+            createdAt: Date.now(),
+          },
+        };
+
+        dispatch({
+          type: addMessage,
+          payload: messageData,
+        });
+      }
     });
 
     return () => {
       socket.off('managerJoinToChat');
     };
-  }, [dispatch]);
+  }, [chatRoomInProgress, dispatch]);
 
-  // when manager disconnect - Redux store is updated
+  // when manager disconnect Redux store is updated
   useEffect(() => {
-    socket.on('disconnectManager', room => {
-      console.log('🚀 ~ file: ChatPage.jsx:74 ~ useEffect ~ room:', room);
-      setIsManagerDisconnect(true);
-      dispatch({ type: updateManager, payload: room });
+    socket.on('disconnectManager', rooms => {
+      const { _id, managerName, managerSurname } = chatRoomInProgress;
+
+      const roomIndex = rooms.findIndex(room => {
+        return room._id === _id;
+      });
+
+      dispatch({ type: updateManager, payload: rooms[roomIndex] });
+      const messageData = {
+        roomId: _id,
+        message: {
+          messageOwner: 'Бот',
+          messageType: 'text',
+          messageText: `Менеджер ${managerName} ${managerSurname} від'єднався. Очікуйте підключення менеджера...`,
+          createdAt: Date.now(),
+        },
+      };
+
+      dispatch({
+        type: addMessage,
+        payload: messageData,
+      });
     });
 
     return () => {
       socket.off('disconnectManager');
     };
-  }, [dispatch]);
+  }, [chatRoomInProgress, dispatch]);
 
   // automatic scroll when new message adds
   useEffect(() => {
@@ -133,20 +170,6 @@ export const ChatPage = () => {
                 />
               );
             })}
-          {isManagerConnect && (
-            <MessageTemplate
-              type="text"
-              text={`До чату приєднався менеджер ${chatRoomInProgress.managerName} ${chatRoomInProgress.managerSurname}`}
-              time={Date.now()}
-            />
-          )}
-          {isManagerDisconnect && (
-            <MessageTemplate
-              type="text"
-              text={`Менеджер ${chatRoomInProgress.managerName} ${chatRoomInProgress.managerSurname} від'єднався. Очікуйте підключення менеджера...`}
-              time={Date.now()}
-            />
-          )}
         </section>
       </Container>
       <Footer />

@@ -59,9 +59,9 @@ export const chatSlice = createSlice({
 
       .addCase(closeChatRoom.pending, handlePending)
       .addCase(closeChatRoom.fulfilled, (state, { payload }) => {
-        const roomIndex = state.chatRooms.findIndex(room => {
-          return room._id === payload.roomId;
-        });
+        const roomIndex = state.chatRooms.findIndex(
+          room => room._id === payload.roomId
+        );
 
         if (roomIndex !== -1) {
           state.chatRooms[roomIndex].chatRoomStatus = 'completed';
@@ -99,9 +99,9 @@ export const chatSlice = createSlice({
           isChatRoomProcessed,
         } = payload;
 
-        const roomIndex = state.chatRooms.findIndex(room => {
-          return room._id === roomId;
-        });
+        const roomIndex = state.chatRooms.findIndex(
+          room => room._id === roomId
+        );
 
         if (roomIndex !== -1) {
           state.chatRooms[roomIndex].managerId = managerId;
