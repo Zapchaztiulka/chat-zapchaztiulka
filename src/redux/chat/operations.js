@@ -27,21 +27,6 @@ export const createChatRoom = createAsyncThunk(
   }
 );
 
-// export const addMessage = createAsyncThunk(
-//   'chat/addMessage',
-//   async ({ chatRoomId, userId, message }, thunkAPI) => {
-//     try {
-//       const { data } = await axios.patch(`/chats/addMessage/${chatRoomId}`, {
-//         userId,
-//         message,
-//       });
-//       return data;
-//     } catch (e) {
-//       return thunkAPI.rejectWithValue(e.message);
-//     }
-//   }
-// );
-
 export const closeChatRoom = createAsyncThunk(
   'chat/closeChat',
   async ({ chatRoomId, userId }, thunkAPI) => {

@@ -47,6 +47,20 @@ export const ChatPage = () => {
     }
   }, [chatRoomInProgress, dispatch, userId]);
 
+  // handle new message from manager
+  useEffect(() => {
+    socket.on('managerMessage', ({ roomId, message }) => {
+      dispatch({
+        type: addMessage,
+        payload: { roomId, message },
+      });
+    });
+
+    return () => {
+      socket.off('managerMessage');
+    };
+  }, [dispatch]);
+
   // update status in Redux store when user enters or quits
   useEffect(() => {
     socket.on('userStatusChanged', ({ userId, isOnline }) => {
@@ -63,8 +77,8 @@ export const ChatPage = () => {
     socket.on('managerJoinToChat', room => {
       dispatch({ type: updateManager, payload: room });
 
-      if (chatRoomInProgress) {
-        const { _id, managerName, managerSurname } = chatRoomInProgress;
+      const { _id, managerName, managerSurname } = chatRoomInProgress;
+      if (managerName) {
         const messageData = {
           roomId: _id,
           message: {
@@ -90,27 +104,29 @@ export const ChatPage = () => {
   // when manager disconnect Redux store is updated
   useEffect(() => {
     socket.on('disconnectManager', rooms => {
-      const { _id, managerName, managerSurname } = chatRoomInProgress;
+      if (chatRoomInProgress) {
+        const { _id, managerName, managerSurname } = chatRoomInProgress;
 
-      const roomIndex = rooms.findIndex(room => {
-        return room._id === _id;
-      });
+        const roomIndex = rooms.findIndex(room => {
+          return room._id === _id;
+        });
 
-      dispatch({ type: updateManager, payload: rooms[roomIndex] });
-      const messageData = {
-        roomId: _id,
-        message: {
-          messageOwner: 'Бот',
-          messageType: 'text',
-          messageText: `Менеджер ${managerName} ${managerSurname} від'єднався. Очікуйте підключення менеджера...`,
-          createdAt: Date.now(),
-        },
-      };
+        dispatch({ type: updateManager, payload: rooms[roomIndex] });
+        const messageData = {
+          roomId: _id,
+          message: {
+            messageOwner: 'Бот',
+            messageType: 'text',
+            messageText: `Менеджер ${managerName} ${managerSurname} від'єднався. Очікуйте підключення менеджера...`,
+            createdAt: Date.now(),
+          },
+        };
 
-      dispatch({
-        type: addMessage,
-        payload: messageData,
-      });
+        dispatch({
+          type: addMessage,
+          payload: messageData,
+        });
+      }
     });
 
     return () => {
@@ -118,7 +134,7 @@ export const ChatPage = () => {
     };
   }, [chatRoomInProgress, dispatch]);
 
-  // automatic scroll when new message adds
+  // automatic scroll when new message is added
   useEffect(() => {
     if (messageContainerRef.current) {
       const scrollHeight = messageContainerRef.current.scrollHeight;

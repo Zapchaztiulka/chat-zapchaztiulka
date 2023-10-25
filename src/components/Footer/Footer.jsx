@@ -22,6 +22,7 @@ export const Footer = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileSelected, setFileSelected] = useState(false);
   const [temporaryImageURL, setTemporaryImageURL] = useState(null);
+  const [isSendingFile, setIsSendingFile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const fileInputRef = useRef(null);
@@ -80,6 +81,7 @@ export const Footer = () => {
   const sendFileToServer = () => {
     if (selectedFile) {
       setIsLoading(true);
+      setIsSendingFile(true);
       const formData = new FormData();
       formData.append('chatImageURL', selectedFile);
       sendFile(formData)
@@ -109,6 +111,7 @@ export const Footer = () => {
           setFileSelected(false);
           setTemporaryImageURL(null);
           setIsLoading(false);
+          setIsSendingFile(false);
         });
     }
   };
@@ -137,6 +140,18 @@ export const Footer = () => {
     }
   };
 
+  // handle to send a message after pushing of button "Enter"
+  const handleKeyDown = event => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      if (isSendingFile) {
+        sendFileToServer();
+      } else {
+        handleSubmitMessage();
+      }
+    }
+  };
+
   // handle changing of footer menu
   const toggleMenu = () => {
     setActiveMenu(!activeMenu);
@@ -156,6 +171,7 @@ export const Footer = () => {
               rows={rows}
               value={message}
               onChange={handleMessageChange}
+              onKeyDown={handleKeyDown}
               onFocus={handleFocus}
               onBlur={() => setRows(1)} // return count of rows to initial value
             />
