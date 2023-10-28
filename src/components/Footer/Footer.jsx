@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { socket } from '../../socket';
@@ -12,7 +13,7 @@ import { closeChatRoom, sendFile } from '../../redux/chat/operations';
 import { selectChatRoomInProgress } from '../../redux/chat/selectors';
 import { addMessage } from '../../redux/chat/actions';
 
-export const Footer = () => {
+export const Footer = ({ isActiveMenu }) => {
   const dispatch = useDispatch();
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const [activeMenu, setActiveMenu] = useState(false);
@@ -23,15 +24,16 @@ export const Footer = () => {
   const [fileSelected, setFileSelected] = useState(false);
   const [temporaryImageURL, setTemporaryImageURL] = useState(null);
   const [isSendingFile, setIsSendingFile] = useState(false);
+  const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fileInputRef = useRef(null);
   const userId = localStorage.getItem('userId');
 
   // handle closing of chat room
   const handleCloseChat = () => {
     if (chatRoomInProgress) {
       dispatch(closeChatRoom({ chatRoomId: chatRoomInProgress._id, userId }));
+      setActiveMenu(false);
     }
   };
 
@@ -157,6 +159,11 @@ export const Footer = () => {
     setActiveMenu(!activeMenu);
   };
 
+  // handle changing of footer menu
+  useEffect(() => {
+    setActiveMenu(isActiveMenu);
+  }, [isActiveMenu]);
+
   return (
     <>
       {isLoading ? (
@@ -226,7 +233,13 @@ export const Footer = () => {
           </div>
           {activeMenu && (
             <div className="flex gap-3 py-xs justify-center fade-in">
-              <SecondaryBtn disabled>Головне меню</SecondaryBtn>
+              <SecondaryBtn
+                to="/"
+                disabled={chatRoomInProgress?.isChatRoomProcessed}
+                onClick={() => setActiveMenu(false)}
+              >
+                Головне меню
+              </SecondaryBtn>
               <DestructiveBtn to="/" onClick={handleCloseChat}>
                 Завершити діалог
               </DestructiveBtn>
@@ -236,4 +249,8 @@ export const Footer = () => {
       )}
     </>
   );
+};
+
+Footer.propTypes = {
+  isActiveMenu: PropTypes.bool.isRequired,
 };

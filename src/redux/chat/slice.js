@@ -1,16 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import {
-  authUser,
-  createChatRoom,
-  // addMessage,
-  closeChatRoom,
-} from './operations';
+import { authUser, createChatRoom, closeChatRoom } from './operations';
 import {
   updateUserStatus,
   updateIsChatRoomOpen,
   addMessage,
   updateManager,
+  closeChatByManager,
 } from './actions';
 
 const handlePending = state => {
@@ -76,6 +72,18 @@ export const chatSlice = createSlice({
       .addCase(closeChatRoom.rejected, handleRejected)
 
       // slices to update only Redux state
+      .addCase(closeChatByManager, (state, { payload }) => {
+        const chatRoom = state.chatRooms.find(
+          room => room._id === payload.room._id
+        );
+        if (chatRoom) {
+          chatRoom.chatRoomStatus = 'completed';
+          chatRoom.isChatRoomProcessed = false;
+          chatRoom.isChatRoomOpen = false;
+        }
+        state.isOnline = false;
+      })
+
       .addCase(addMessage, (state, { payload }) => {
         const { roomId, message } = payload;
 

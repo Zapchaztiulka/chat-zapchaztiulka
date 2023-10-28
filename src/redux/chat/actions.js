@@ -5,3 +5,5 @@ export const updateIsChatRoomOpen = 'UPDATE_IS_CHATROOM_OPEN';
 export const updateManager = 'UPDATE_MANAGER';
 
 export const addMessage = 'ADD_MESSAGE';
+
+export const closeChatByManager = 'CLOSE_CHAT_BY_MANAGER';

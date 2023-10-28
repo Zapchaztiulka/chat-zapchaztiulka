@@ -13,10 +13,12 @@ import {
   updateUserStatus,
   updateManager,
   addMessage,
+  closeChatByManager,
 } from '../../redux/chat/actions';
 import {
   selectToken,
   selectChatRoomInProgress,
+  selectChat,
 } from '../../redux/chat/selectors';
 import { createChatRoom } from '../../redux/chat/operations';
 
@@ -27,6 +29,7 @@ export const ChatPage = () => {
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const messageContainerRef = useRef(null);
   const userId = localStorage.getItem('userId');
+  const user = useSelector(selectChat);
 
   // send token to the server for authentication
   useEffect(() => {
@@ -40,12 +43,26 @@ export const ChatPage = () => {
     setIsAuthenticated(false);
   });
 
-  // create chat room for user if it was not before
+  // handle to close chat by Manager
   useEffect(() => {
-    if (!chatRoomInProgress) {
+    socket.on('closeChatByManager', ({ room }) => {
+      dispatch({
+        type: closeChatByManager,
+        payload: { room },
+      });
+    });
+
+    return () => {
+      socket.off('closeChatByManager');
+    };
+  }, [dispatch]);
+
+  // create chat room for user
+  useEffect(() => {
+    if (!chatRoomInProgress && user.isOnline === true) {
       dispatch(createChatRoom(userId));
     }
-  }, [chatRoomInProgress, dispatch, userId]);
+  }, [chatRoomInProgress, dispatch, user.isOnline, userId]);
 
   // handle new message from manager
   useEffect(() => {
@@ -77,7 +94,8 @@ export const ChatPage = () => {
     socket.on('managerJoinToChat', room => {
       dispatch({ type: updateManager, payload: room });
 
-      const { _id, managerName, managerSurname } = chatRoomInProgress;
+      const { _id, managerName, managerSurname } = room;
+
       if (managerName) {
         const messageData = {
           roomId: _id,
@@ -99,7 +117,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('managerJoinToChat');
     };
-  }, [chatRoomInProgress, dispatch]);
+  }, [dispatch]);
 
   // when manager disconnect Redux store is updated
   useEffect(() => {
@@ -111,7 +129,10 @@ export const ChatPage = () => {
           return room._id === _id;
         });
 
-        dispatch({ type: updateManager, payload: rooms[roomIndex] });
+        if (roomIndex !== -1) {
+          dispatch({ type: updateManager, payload: rooms[roomIndex] });
+        }
+
         const messageData = {
           roomId: _id,
           message: {
@@ -158,11 +179,13 @@ export const ChatPage = () => {
           ref={messageContainerRef}
           className="flex flex-col gap-5 py-5 message-container"
         >
-          <MessageTemplate
-            type="text"
-            text={welcomeStartChat}
-            time={chatRoomInProgress?.createdAt}
-          />
+          {chatRoomInProgress && (
+            <MessageTemplate
+              type="text"
+              text={welcomeStartChat}
+              time={chatRoomInProgress?.createdAt}
+            />
+          )}
           {chatRoomInProgress &&
             chatRoomInProgress?.messages.map((message, idx) => {
               const {
@@ -178,6 +201,8 @@ export const ChatPage = () => {
                   owner={
                     messageOwner === 'user'
                       ? 'Ви'
+                      : messageOwner === 'Бот'
+                      ? 'Бот'
                       : `Менеджер ${chatRoomInProgress.managerName} ${chatRoomInProgress.managerSurname}`
                   }
                   type={messageType}
@@ -186,9 +211,16 @@ export const ChatPage = () => {
                 />
               );
             })}
+          {!chatRoomInProgress && (
+            <MessageTemplate
+              type="text"
+              text="Менеджер завершив чат. Для продовження перейдіть в Головне меню"
+              time={Date.now()}
+            />
+          )}
         </section>
       </Container>
-      <Footer />
+      <Footer isActiveMenu={chatRoomInProgress ? false : true} />
     </div>
   );
 };

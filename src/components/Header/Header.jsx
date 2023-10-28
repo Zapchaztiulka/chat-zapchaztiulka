@@ -30,11 +30,7 @@ export const Header = () => {
         isChatRoomOpen: chatVisible,
       };
 
-      if (chatVisible) {
-        socket.emit('chatRoomOpenChanged', chatRoomOpenChanged);
-      } else {
-        socket.emit('chatRoomOpenChanged', chatRoomOpenChanged);
-      }
+      socket.emit('chatRoomOpenChanged', chatRoomOpenChanged);
 
       dispatch({
         type: updateIsChatRoomOpen,
