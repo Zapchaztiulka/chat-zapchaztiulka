@@ -131,22 +131,22 @@ export const ChatPage = () => {
 
         if (roomIndex !== -1) {
           dispatch({ type: updateManager, payload: rooms[roomIndex] });
+
+          const messageData = {
+            roomId: _id,
+            message: {
+              messageOwner: 'Бот',
+              messageType: 'text',
+              messageText: `Менеджер ${managerName} ${managerSurname} від'єднався. Очікуйте підключення менеджера...`,
+              createdAt: Date.now(),
+            },
+          };
+
+          dispatch({
+            type: addMessage,
+            payload: messageData,
+          });
         }
-
-        const messageData = {
-          roomId: _id,
-          message: {
-            messageOwner: 'Бот',
-            messageType: 'text',
-            messageText: `Менеджер ${managerName} ${managerSurname} від'єднався. Очікуйте підключення менеджера...`,
-            createdAt: Date.now(),
-          },
-        };
-
-        dispatch({
-          type: addMessage,
-          payload: messageData,
-        });
       }
     });
 

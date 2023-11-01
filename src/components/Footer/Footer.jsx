@@ -236,7 +236,7 @@ export const Footer = ({ isActiveMenu }) => {
               <SecondaryBtn
                 to="/"
                 disabled={chatRoomInProgress?.isChatRoomProcessed}
-                onClick={() => setActiveMenu(false)}
+                onClick={handleCloseChat}
               >
                 Головне меню
               </SecondaryBtn>

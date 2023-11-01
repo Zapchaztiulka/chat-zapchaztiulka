@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet, useLocation } from 'react-router-dom';
 import './styles.css';
@@ -19,15 +19,12 @@ export const Header = () => {
   // handle changing of active chat when user unfolded or rolled up it
   const toggleChatVisibility = () => {
     setChatVisible(!chatVisible);
-  };
 
-  // deliver an event by sockets when chat is rolling up or unfolding
-  useEffect(() => {
-    if (location.pathname !== '/' && chatRoomInProgress) {
+    if (location.pathname !== '/') {
       const chatRoomOpenChanged = {
         userId,
         roomId: chatRoomInProgress._id,
-        isChatRoomOpen: chatVisible,
+        isChatRoomOpen: !chatVisible,
       };
 
       socket.emit('chatRoomOpenChanged', chatRoomOpenChanged);
@@ -37,7 +34,7 @@ export const Header = () => {
         payload: chatRoomOpenChanged,
       });
     }
-  }, [chatRoomInProgress, chatVisible, dispatch, location.pathname, userId]);
+  };
 
   return (
     <>
