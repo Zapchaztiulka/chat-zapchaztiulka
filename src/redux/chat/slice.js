@@ -46,10 +46,17 @@ export const chatSlice = createSlice({
 
       .addCase(createChatRoom.pending, handlePending)
       .addCase(createChatRoom.fulfilled, (state, { payload }) => {
-        state.chatRooms.push(payload);
-        state.isOnline = true;
-        state.isLoading = false;
-        state.error = null;
+        const existingRooms = [...state.chatRooms];
+        const roomIndex = existingRooms.findIndex(
+          room => room._id === payload._id
+        );
+
+        if (roomIndex === -1) {
+          state.chatRooms.push(payload);
+          state.isOnline = true;
+          state.isLoading = false;
+          state.error = null;
+        }
       })
       .addCase(createChatRoom.rejected, handleRejected)
 

@@ -1,5 +1,26 @@
 .message-container {
-  max-height: calc(100vh - 15vh);
+  max-height: calc(100vh - 25vh);
   overflow-y: auto;
   overflow-x: hidden;
+  position: relative;
+
+  /* Скрити горизонтальний індикатор прокрутки */
+  &::-webkit-scrollbar {
+    width: 0.5em;
+  }
+
+  /* Скрити вертикальний індикатор прокрутки */
+  &::-webkit-scrollbar-thumb {
+    background-color: transparent;
+  }
+
+  /* Скрити трек прокрутки (фон) */
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  /* Скрити кути */
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
 }

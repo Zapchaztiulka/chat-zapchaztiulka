@@ -1,6 +1,10 @@
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
-
 export default {
-  plugins: [tailwindcss, autoprefixer],
+  plugins: {
+    'postcss-import': {},
+    'tailwindcss/nesting': 'postcss-nesting',
+    tailwindcss: {},
+    'postcss-preset-env': {
+      features: { 'nesting-rules': false },
+    },
+  },
 };
