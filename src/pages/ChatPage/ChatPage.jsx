@@ -86,7 +86,7 @@ export const ChatPage = () => {
   // handle to typing by Manager
   useEffect(() => {
     socket.on('managerTyping', ({ isTyping, manager }) => {
-      if (isTyping && manager.id === chatRoomInProgress.managerId) {
+      if (isTyping && manager.id === chatRoomInProgress?.managerId) {
         setIsTyping(true);
       } else setIsTyping(false);
     });
@@ -94,7 +94,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('managerTyping');
     };
-  }, [chatRoomInProgress.managerId]);
+  }, [chatRoomInProgress?.managerId]);
 
   // update status in Redux store when user enters or quits
   useEffect(() => {
