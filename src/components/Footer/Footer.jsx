@@ -29,6 +29,8 @@ export const Footer = ({ isActiveMenu }) => {
 
   const userId = localStorage.getItem('userId');
 
+  let typingTimeout;
+
   // handle closing of chat room
   const handleCloseChat = () => {
     if (chatRoomInProgress) {
@@ -52,6 +54,15 @@ export const Footer = ({ isActiveMenu }) => {
 
     setRows(currentRows);
     rowsRef.current = currentRows;
+
+    // send emit when user is typing
+    socket.emit('userTyping', { isTyping: true });
+
+    // Additionally - if the user stops entering text after 2 second, we assume that he has stopped typing
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+      socket.emit('userTyping', { isTyping: false });
+    }, 1000);
   };
 
   // handle a text message
@@ -159,6 +170,12 @@ export const Footer = ({ isActiveMenu }) => {
     setActiveMenu(!activeMenu);
   };
 
+  // handle to lost focus on input
+  const handleOnBlur = () => {
+    setRows(1); // return count of rows to initial value
+    socket.emit('userTyping', { isTyping: false }); // if the user lost focus on input, we assume that he has stopped typing
+  };
+
   // handle changing of footer menu
   useEffect(() => {
     setActiveMenu(isActiveMenu);
@@ -180,7 +197,7 @@ export const Footer = ({ isActiveMenu }) => {
               onChange={handleMessageChange}
               onKeyDown={handleKeyDown}
               onFocus={handleFocus}
-              onBlur={() => setRows(1)} // return count of rows to initial value
+              onBlur={handleOnBlur}
             />
             {!message && !fileSelected && (
               <>

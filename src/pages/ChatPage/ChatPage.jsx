@@ -6,6 +6,8 @@ import { socket } from '../../socket';
 import './styles.css';
 import { Footer } from '../../components/Footer';
 import { MessageTemplate } from '../../components/MessageTemplate';
+import { PrimaryBtn } from '../../components/Button';
+import { BtnLoader } from '../../components/Loader';
 import { Container } from '../../utils';
 import { welcomeStartChat } from '../../helpers';
 
@@ -24,12 +26,15 @@ import { createChatRoom } from '../../redux/chat/operations';
 
 export const ChatPage = () => {
   const dispatch = useDispatch();
-  const storedToken = useSelector(selectToken);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const storedToken = useSelector(selectToken);
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
+  const user = useSelector(selectChat);
+
   const messageContainerRef = useRef(null);
   const userId = localStorage.getItem('userId');
-  const user = useSelector(selectChat);
 
   // send token to the server for authentication
   useEffect(() => {
@@ -77,6 +82,19 @@ export const ChatPage = () => {
       socket.off('managerMessage');
     };
   }, [dispatch]);
+
+  // handle to typing by Manager
+  useEffect(() => {
+    socket.on('managerTyping', ({ isTyping, manager }) => {
+      if (isTyping && manager.id === chatRoomInProgress.managerId) {
+        setIsTyping(true);
+      } else setIsTyping(false);
+    });
+
+    return () => {
+      socket.off('managerTyping');
+    };
+  }, [chatRoomInProgress.managerId]);
 
   // update status in Redux store when user enters or quits
   useEffect(() => {
@@ -165,7 +183,7 @@ export const ChatPage = () => {
         messageContainerRef.current.scrollTop = scrollHeight - maxVisibleHeight;
       }
     }
-  }, [chatRoomInProgress]);
+  }, [chatRoomInProgress, isTyping]);
 
   // not render if user is not authenticated
   if (!isAuthenticated) {
@@ -211,6 +229,18 @@ export const ChatPage = () => {
                 />
               );
             })}
+          {isTyping && (
+            <div>
+              <PrimaryBtn disabled>
+                <div className="flex gap-xs2">
+                  <div className="font-normal text-sm leading-5 text-textColors-tertiary">
+                    Менеджер друкує повідомлення
+                  </div>
+                  <BtnLoader height={20} width={48} radius={8} />
+                </div>
+              </PrimaryBtn>
+            </div>
+          )}
           {!chatRoomInProgress && (
             <MessageTemplate
               type="text"
