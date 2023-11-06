@@ -4,22 +4,22 @@
   overflow-x: hidden;
   position: relative;
 
-  /* Скрити горизонтальний індикатор прокрутки */
+  /* Сховати горизонтальний індикатор прокрутки */
   &::-webkit-scrollbar {
     width: 0.5em;
   }
 
-  /* Скрити вертикальний індикатор прокрутки */
+  /* Сховати вертикальний індикатор прокрутки */
   &::-webkit-scrollbar-thumb {
     background-color: transparent;
   }
 
-  /* Скрити трек прокрутки (фон) */
+  /* Сховати трек прокрутки (фон) */
   &::-webkit-scrollbar-track {
     background-color: transparent;
   }
 
-  /* Скрити кути */
+  /* Сховати кути */
   &::-webkit-scrollbar-corner {
     background-color: transparent;
   }
