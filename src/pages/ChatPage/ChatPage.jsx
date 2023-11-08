@@ -8,6 +8,7 @@ import { Footer } from '../../components/Footer';
 import { MessageTemplate } from '../../components/MessageTemplate';
 import { PrimaryBtn } from '../../components/Button';
 import { BtnLoader } from '../../components/Loader';
+import { ModalWarning } from '../../components/Modal';
 import { Container } from '../../utils';
 import { welcomeStartChat } from '../../helpers';
 
@@ -22,12 +23,14 @@ import {
   selectChatRoomInProgress,
   selectChat,
 } from '../../redux/chat/selectors';
-import { createChatRoom } from '../../redux/chat/operations';
+import { createChatRoom, closeChatRoom } from '../../redux/chat/operations';
 
 export const ChatPage = () => {
   const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isActiveMenu, setIsActiveMenu] = useState(false);
 
   const storedToken = useSelector(selectToken);
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
@@ -185,6 +188,18 @@ export const ChatPage = () => {
     }
   }, [chatRoomInProgress, isTyping]);
 
+  // handle closing of chat room
+  const handleCloseChat = () => {
+    if (chatRoomInProgress) {
+      dispatch(closeChatRoom({ chatRoomId: chatRoomInProgress._id, userId }));
+      setIsActiveMenu(false);
+      setIsOpenModal(false);
+    }
+  };
+
+  // handle to open modal window to approve of closing chat
+  const handleOpenModal = () => setIsOpenModal(true);
+
   // not render if user is not authenticated
   if (!isAuthenticated) {
     return null;
@@ -249,8 +264,18 @@ export const ChatPage = () => {
             />
           )}
         </section>
+        {isOpenModal && (
+          <ModalWarning
+            onFinishChat={handleCloseChat}
+            closeModal={() => setIsOpenModal(false)}
+          />
+        )}
       </Container>
-      <Footer isActiveMenu={chatRoomInProgress ? false : true} />
+      <Footer
+        isActiveMenu={isActiveMenu}
+        isOpenModal={handleOpenModal}
+        onFinishChat={handleCloseChat}
+      />
     </div>
   );
 };

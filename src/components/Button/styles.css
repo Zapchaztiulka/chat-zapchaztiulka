@@ -1,62 +1,62 @@
 .prime {
-  @apply font-sans font-semibold p-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-contrast  bg-bgColors-defaultBlue hover:bg-bgColors-hoverBlue 
        focus:outline-none focus:drop-shadow-focusButton rounded-medium transition-colors 
        duration-300;
 }
 
 .prime-disabled {
-  @apply font-sans font-semibold p-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-disabled bg-bgColors-disable rounded-medium cursor-not-allowed;
 }
 
 .second {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-brand  bg-mainColors-staticWhite hover:bg-bgColors-hoverGrey 
        border border-solid border-borderColors-defaultBlue focus:outline-none 
        focus:drop-shadow-focusButton rounded-medium transition-colors duration-300;
 }
 
 .second-disabled {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-disabled bg-bgColors-disable border border-solid
        border-borderColors-disabled rounded-medium cursor-not-allowed;
 }
 
 .second-grey {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-primary  bg-mainColors-staticWhite hover:bg-bgColors-hoverGrey 
        border border-solid border-borderColors-default focus:outline-none 
        focus:drop-shadow-focusButton rounded-medium transition-colors duration-300;
 }
 
 .second-grey-disabled {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-disabled bg-bgColors-disable border border-solid
        border-borderColors-disabled rounded-medium cursor-not-allowed;
 }
 
 .tertiary {
-  @apply font-sans font-semibold px-xs py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
   text-textColors-brand bg-transparent hover:bg-bgColors-hoverGrey
   focus:outline-none focus:drop-shadow-focusButton rounded-zero transition-colors 
   duration-300;
 }
 
 .tertiary-disabled {
-  @apply font-sans font-semibold px-xs py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
   text-textColors-tertiary bg-bgColors-disable rounded-zero cursor-not-allowed;
 }
 
 .destructive {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-contrast  bg-bgColors-defaultDestructive
        hover:bg-bgColors-hoverDestructive focus:outline-none 
        focus:drop-shadow-focusButton rounded-medium transition-colors duration-300;
 }
 
 .destructive-disabled {
-  @apply font-sans font-semibold px-l py-xs text-base leading-6 tracking-button
+  @apply font-sans font-semibold px-m py-xs text-base leading-6 tracking-button
        text-textColors-disabled bg-bgColors-disable border border-solid
        border-borderColors-disabled rounded-medium cursor-not-allowed;
 }

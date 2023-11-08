@@ -9,11 +9,11 @@ import { MenuIcon, AttachIcon, SendIcon } from '../../images/svg';
 import { iconColors } from '../../helpers';
 import { DestructiveBtn, SecondaryBtn } from '../../components/Button';
 import { Loader } from '../../components/Loader';
-import { closeChatRoom, sendFile } from '../../redux/chat/operations';
+import { sendFile } from '../../redux/chat/operations';
 import { selectChatRoomInProgress } from '../../redux/chat/selectors';
 import { addMessage } from '../../redux/chat/actions';
 
-export const Footer = ({ isActiveMenu }) => {
+export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
   const dispatch = useDispatch();
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const [activeMenu, setActiveMenu] = useState(false);
@@ -30,14 +30,6 @@ export const Footer = ({ isActiveMenu }) => {
   const userId = localStorage.getItem('userId');
 
   let typingTimeout;
-
-  // handle closing of chat room
-  const handleCloseChat = () => {
-    if (chatRoomInProgress) {
-      dispatch(closeChatRoom({ chatRoomId: chatRoomInProgress._id, userId }));
-      setActiveMenu(false);
-    }
-  };
 
   // handle input with auto extending of input field
   const handleMessageChange = evt => {
@@ -253,11 +245,11 @@ export const Footer = ({ isActiveMenu }) => {
               <SecondaryBtn
                 to="/"
                 disabled={chatRoomInProgress?.isChatRoomProcessed}
-                onClick={handleCloseChat}
+                onClick={() => onFinishChat()}
               >
                 Головне меню
               </SecondaryBtn>
-              <DestructiveBtn to="/" onClick={handleCloseChat}>
+              <DestructiveBtn onClick={() => isOpenModal()}>
                 Завершити діалог
               </DestructiveBtn>
             </div>
@@ -270,4 +262,6 @@ export const Footer = ({ isActiveMenu }) => {
 
 Footer.propTypes = {
   isActiveMenu: PropTypes.bool.isRequired,
+  isOpenModal: PropTypes.func.isRequired,
+  onFinishChat: PropTypes.func,
 };

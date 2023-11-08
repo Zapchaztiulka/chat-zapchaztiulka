@@ -3,24 +3,24 @@
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+}
 
-  /* Сховати горизонтальний індикатор прокрутки */
-  &::-webkit-scrollbar {
-    width: 0.5em;
-  }
+/* Сховати горизонтальний індикатор прокрутки */
+.message-container::-webkit-scrollbar {
+  width: 0.5em;
+}
 
-  /* Сховати вертикальний індикатор прокрутки */
-  &::-webkit-scrollbar-thumb {
-    background-color: transparent;
-  }
+/* Сховати вертикальний індикатор прокрутки */
+.message-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
 
-  /* Сховати трек прокрутки (фон) */
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
+/* Сховати трек прокрутки (фон) */
+.message-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
 
-  /* Сховати кути */
-  &::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
+/* Сховати кути */
+.message-container::-webkit-scrollbar-corner {
+  background-color: transparent;
 }

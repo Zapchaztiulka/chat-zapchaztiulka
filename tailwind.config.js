@@ -45,6 +45,7 @@ export default {
           defaultDestructive: 'rgba(217, 45, 32, 1)',
           img: 'rgba(249, 249, 249, 1)',
           disable: 'rgba(249, 249, 249, 1)',
+          backDrop: 'rgba(42, 43, 48, 0.4)',
         },
         iconColors: {
           primary: 'rgba(46, 50, 56, 1)',
