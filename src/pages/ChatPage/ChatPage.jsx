@@ -30,7 +30,7 @@ export const ChatPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isActiveMenu, setIsActiveMenu] = useState(false);
+  const [isActiveMenu, setIsActiveMenu] = useState(true);
 
   const storedToken = useSelector(selectToken);
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
@@ -88,8 +88,8 @@ export const ChatPage = () => {
 
   // handle to typing by Manager
   useEffect(() => {
-    socket.on('managerTyping', ({ isTyping, manager }) => {
-      if (isTyping && manager.id === chatRoomInProgress?.managerId) {
+    socket.on('managerTyping', ({ isTyping, roomId }) => {
+      if (isTyping && roomId === chatRoomInProgress?._id) {
         setIsTyping(true);
       } else setIsTyping(false);
     });
@@ -97,7 +97,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('managerTyping');
     };
-  }, [chatRoomInProgress?.managerId]);
+  }, [chatRoomInProgress?._id]);
 
   // update status in Redux store when user enters or quits
   useEffect(() => {
@@ -191,7 +191,14 @@ export const ChatPage = () => {
   // handle closing of chat room
   const handleCloseChat = () => {
     if (chatRoomInProgress) {
-      dispatch(closeChatRoom({ chatRoomId: chatRoomInProgress._id, userId }));
+      dispatch(
+        closeChatRoom({
+          chatRoomId: chatRoomInProgress._id,
+          userId,
+          username: user.username,
+          userSurname: user.userSurname,
+        })
+      );
       setIsActiveMenu(false);
       setIsOpenModal(false);
     }

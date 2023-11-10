@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import _debounce from 'lodash/debounce';
 import { socket } from '../../socket';
 
 import './styles.css';
@@ -31,7 +32,12 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
 
   let typingTimeout;
 
-  // handle input with auto extending of input field
+  // handle to send emit when user is typing
+  const handleTyping = _debounce(isTyping => {
+    socket.emit('userTyping', { isTyping, roomId: chatRoomInProgress._id });
+  }, 1000);
+
+  // handle to input with auto extending of input field
   const handleMessageChange = evt => {
     const textarea = evt.target;
     const minRows = 1;
@@ -47,14 +53,14 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
     setRows(currentRows);
     rowsRef.current = currentRows;
 
-    // send emit when user is typing
-    socket.emit('userTyping', { isTyping: true });
+    handleTyping(true);
 
-    // Additionally - if the user stops entering text after 2 second, we assume that he has stopped typing
+    // Additionally - if the user stops entering text,
+    // but cursor is in input field - we assume that he has stopped typing too
     clearTimeout(typingTimeout);
     typingTimeout = setTimeout(() => {
-      socket.emit('userTyping', { isTyping: false });
-    }, 1000);
+      handleTyping(false);
+    }, 2000);
   };
 
   // handle a text message
@@ -165,7 +171,8 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
   // handle to lost focus on input
   const handleOnBlur = () => {
     setRows(1); // return count of rows to initial value
-    socket.emit('userTyping', { isTyping: false }); // if the user lost focus on input, we assume that he has stopped typing
+    handleTyping(false); // if the user lost focus on input, we assume that he has stopped typing
+    clearTimeout(typingTimeout);
   };
 
   // handle changing of footer menu
@@ -216,20 +223,20 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
                 </button>
               </>
             )}
-            {message && (
+            {(fileSelected || message) && (
               <button
                 type="submit"
                 className="icon-style"
-                onClick={handleSubmitMessage}
-              >
-                <SendIcon />
-              </button>
-            )}
-            {fileSelected && (
-              <button
-                type="submit"
-                className="icon-style"
-                onClick={sendFileToServer}
+                onClick={
+                  message && fileSelected
+                    ? () => {
+                        handleSubmitMessage();
+                        sendFileToServer();
+                      }
+                    : message
+                    ? handleSubmitMessage
+                    : sendFileToServer
+                }
               >
                 <SendIcon />
               </button>

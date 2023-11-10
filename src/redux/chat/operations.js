@@ -29,12 +29,14 @@ export const createChatRoom = createAsyncThunk(
 
 export const closeChatRoom = createAsyncThunk(
   'chat/closeChat',
-  async ({ chatRoomId, userId }, thunkAPI) => {
+  async ({ chatRoomId, userId, username, userSurname }, thunkAPI) => {
     try {
       const { data } = await axios.patch(
         `/chats/closeChatByUser/${chatRoomId}`,
         {
           userId,
+          username,
+          userSurname,
         }
       );
       return data;
