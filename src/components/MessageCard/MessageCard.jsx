@@ -8,35 +8,31 @@ export const MessageCard = React.memo(
     return (
       <>
         <div
-          className={`font-sans font-normal tracking-button rounded-medium
-                  text-textColors-primary flex flex-col gap-1 p-3 w-5/6
+          className={`font-400 tracking-button rounded-medium
+                  text-textPrimary flex flex-col gap-xs4 p-xs w-3/4
                   ${
                     owner === 'Ви'
-                      ? 'bg-bgColors-brandLight1 self-end'
+                      ? 'bg-bgBrandLight1 self-end'
                       : owner === 'Бот'
-                      ? 'bg-bgColors-greyLigth self-start'
-                      : 'bg-bgColors-brandLight2 self-start'
+                      ? 'bg-bgGreyLigth self-start'
+                      : 'bg-bgBrandLight2 self-start'
                   }
                   ${
                     type !== 'text' &&
-                    ' bg-mainColors-staticWhite border border-solid border-borderColors-default'
+                    'bg-bgWhite border border-solid border-borderDefault'
                   }`}
           style={{ whiteSpace: 'pre-line', wordWrap: 'break-word' }}
         >
-          <p className="font-medium text-xs text-textColors-tertiary">
-            {owner}
-          </p>
+          <p className="font-500 text-[12px] text-textTertiary">{owner}</p>
           {type === 'text' && (
-            <p className="text-base text-textColors-primary self-stretch">
-              {text}
-            </p>
+            <p className=" text-body text-textPrimary self-stretch">{text}</p>
           )}
           {type === 'image' && (
             <div className="max-w-xs h-auto">
               <img src={text} alt={`Image ${time}`} />
             </div>
           )}
-          <p className="text-xxs text-textColors-tertiary self-end">
+          <p className="text-[10px] text-textTertiary self-end">
             {formatDate(time)}
           </p>
         </div>

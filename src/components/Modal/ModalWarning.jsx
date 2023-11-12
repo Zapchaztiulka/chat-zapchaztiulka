@@ -31,20 +31,20 @@ export const ModalWarning = ({ onFinishChat, closeModal }) => {
   return createPortal(
     <div
       onMouseDown={onBackdropOpen}
-      className="fixed z-40 top-[0] left-[0] w-[100vw] h-[100vh] bg-bgColors-backDrop"
+      className="fixed z-40 top-[0] left-[0] w-[100vw] h-[100vh] bg-aditional1"
     >
       <div
         className="absolute z-30 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
                    flex flex-col gap-m2 py-m px-s w-[400px] h-auto items-center justify-center
-                 bg-bgColors-white rounded-medium"
+                 bg-bgWhite rounded-medium"
       >
         <div className="flex flex-col gap-xs items-center justify-center">
           <AlertIcon />
-          <div className="flex flex-col gap-xs2 items-center justify-center leading-6 tracking-textBase">
-            <h4 className="font-medium text-xl text-textColors-primary">
+          <div className="flex flex-col gap-xs2 items-center justify-center">
+            <h4 className="font-500 text-heading4 text-textPrimary">
               Завершити чат з оператором?
             </h4>
-            <p className="font-normal text-base text-textColors-secondary text-center">
+            <p className="font-400 text-body text-textSecondary text-center">
               Ви впевнені, що хочете завершити діалог з оператором?
             </p>
           </div>

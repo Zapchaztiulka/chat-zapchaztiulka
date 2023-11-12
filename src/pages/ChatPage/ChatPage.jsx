@@ -217,7 +217,7 @@ export const ChatPage = () => {
       <Container>
         <section
           ref={messageContainerRef}
-          className="flex flex-col gap-5 py-5 message-container"
+          className="flex flex-col gap-sPlus py-sPlus message-container"
         >
           {chatRoomInProgress && (
             <MessageCard
@@ -255,7 +255,7 @@ export const ChatPage = () => {
             <div>
               <PrimaryBtn disabled>
                 <div className="flex gap-xs2">
-                  <div className="font-normal text-sm leading-5 text-textColors-tertiary">
+                  <div className="font-400 text-caption text-textTertiary">
                     Менеджер друкує повідомлення
                   </div>
                   <BtnLoader height={20} width={48} radius={8} />

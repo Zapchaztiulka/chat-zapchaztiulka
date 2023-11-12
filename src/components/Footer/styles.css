@@ -1,8 +1,7 @@
 .input-style {
-  @apply p-xs pr-20 w-full resize-y overflow-y-auto outline-none cursor-pointer
-  hover:bg-bgColors-hoverGrey hover:border-borderColors-active
-   border-t border-solid border-borderColors-default 
-   focus:border-borderColors-default focus:drop-shadow-focusButton;
+  @apply p-xs pr-xl4 w-full resize-y overflow-y-auto outline-none cursor-pointer
+  hover:bg-bgHoverGrey hover:border-borderActive border-t-1 border-solid
+  border-borderDefault focus:border-borderDefault focus:shadow-btFocus;
 }
 
 .input-style::-webkit-resizer {
@@ -10,7 +9,7 @@
 }
 
 .icon-style {
-  @apply absolute right-xs top-1/2 transform -translate-y-1/2;
+  @apply absolute right-xs top-[45%] transform -translate-y-[50%];
 }
 
 @keyframes fade-in {

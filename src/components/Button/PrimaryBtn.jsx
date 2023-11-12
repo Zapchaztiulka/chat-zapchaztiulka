@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import { bgColors } from '@/helpers';
+import theme from '../../../presets';
 import './styles.css';
 
 export const PrimaryBtn = ({ children, to, disabled, pressed, onClick }) => {
@@ -16,16 +16,16 @@ export const PrimaryBtn = ({ children, to, disabled, pressed, onClick }) => {
 
   return !disabled ? (
     <button
-      className="prime"
+      className="common-style standard-button primary-button"
       style={{
-        backgroundColor: pressed && bgColors.pressedBlue,
+        backgroundColor: pressed && theme.colors.bgPressedDestructive,
       }}
       onClick={handleButtonClick}
     >
       {children}
     </button>
   ) : (
-    <button className="prime-disabled">{children}</button>
+    <button className="common-style disabled-button">{children}</button>
   );
 };
 

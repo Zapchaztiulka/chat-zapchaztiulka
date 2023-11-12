@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import { bgColors } from '@/helpers';
+import theme from '../../../presets';
 import './styles.css';
 
 export const DestructiveBtn = ({
@@ -22,16 +22,18 @@ export const DestructiveBtn = ({
 
   return !disabled ? (
     <button
-      className="destructive"
+      className="common-style standard-button destructive-button"
       style={{
-        backgroundColor: pressed && bgColors.pressedDestructive,
+        backgroundColor: pressed && theme.colors.bgPressedDestructive,
       }}
       onClick={handleButtonClick}
     >
       {children}
     </button>
   ) : (
-    <button className="destructive-disabled">{children}</button>
+    <button className="common-style disabled-button destructive-button-disabled">
+      {children}
+    </button>
   );
 };
 

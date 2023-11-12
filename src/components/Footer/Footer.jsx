@@ -6,8 +6,8 @@ import _debounce from 'lodash/debounce';
 import { socket } from '@/socket';
 
 import './styles.css';
+
 import { MenuIcon, AttachIcon, SendIcon } from '@/images/svg';
-import { iconColors } from '@/helpers';
 import { DestructiveBtn, SecondaryBtn } from '@/components/Button';
 import { Loader } from '@/components/Loader';
 import { sendFile } from '@/redux/chat/operations';
@@ -185,8 +185,8 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <footer className="absolute bottom-0 w-full">
-          <div className="relative items-center bg-mainColors-staticWhite">
+        <footer className="absolute bottom-[0] w-full">
+          <div className="relative items-center bg-bgWhite">
             <textarea
               className="input-style"
               type="text"
@@ -206,11 +206,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
                   style={{ right: '44px' }}
                   onClick={toggleMenu}
                 >
-                  <MenuIcon
-                    colorFill={
-                      activeMenu ? iconColors.brand : iconColors.primary
-                    }
-                  />
+                  <MenuIcon activeMenu={activeMenu} />
                 </button>
                 <button className="icon-style" onClick={openFileInput}>
                   <input
@@ -242,13 +238,13 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
               </button>
             )}
             {temporaryImageURL && (
-              <div className="bg-mainColors-staticWhite ml-5 py-5">
+              <div className="bg-bgWhite ml-sPlus py-sPlus">
                 <img src={temporaryImageURL} alt="Uploaded Image" />
               </div>
             )}
           </div>
           {activeMenu && (
-            <div className="flex gap-3 py-xs justify-center fade-in">
+            <div className="flex gap-xs py-xs justify-center fade-in">
               <SecondaryBtn
                 to="/"
                 disabled={chatRoomInProgress?.isChatRoomProcessed}

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import { mainColors } from '../../helpers';
+import theme from '../../../presets';
 
-const ArrowDownIcon = ({ colorFill = mainColors.staticWhite }) => (
+const ArrowDownIcon = ({ colorFill = theme.colors.iconWhite }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="44"
