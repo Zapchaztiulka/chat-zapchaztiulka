@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { socket } from '../../socket';
+import { socket } from '@/socket';
 
 import './styles.css';
-import { Footer } from '../../components/Footer';
-import { MessageCard } from '../../components/MessageCard';
-import { PrimaryBtn } from '../../components/Button';
-import { BtnLoader } from '../../components/Loader';
-import { ModalWarning } from '../../components/Modal';
-import { Container } from '../../utils';
-import { welcomeStartChat } from '../../helpers';
+import { Footer } from '@/components/Footer';
+import { MessageCard } from '@/components/MessageCard';
+import { PrimaryBtn } from '@/components/Button';
+import { BtnLoader } from '@/components/Loader';
+import { ModalWarning } from '@/components/Modal';
+import { Container } from '@/utils';
+import { welcomeStartChat } from '@/helpers';
 
 import {
   updateUserStatus,

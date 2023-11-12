@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import { bgColors } from '../../helpers';
+import { bgColors } from '@/helpers';
 import './styles.css';
 
 export const PrimaryBtn = ({ children, to, disabled, pressed, onClick }) => {

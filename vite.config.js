@@ -10,9 +10,16 @@ export default defineConfig({
   plugins: [react(), svgr()],
 
   base: '/chat-zapchaztiulka/',
+
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],
+    },
+  },
+
+  resolve: {
+    alias: {
+      '@': '/src',
     },
   },
 });

@@ -3,16 +3,16 @@ import { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import _debounce from 'lodash/debounce';
-import { socket } from '../../socket';
+import { socket } from '@/socket';
 
 import './styles.css';
-import { MenuIcon, AttachIcon, SendIcon } from '../../images/svg';
-import { iconColors } from '../../helpers';
-import { DestructiveBtn, SecondaryBtn } from '../../components/Button';
-import { Loader } from '../../components/Loader';
-import { sendFile } from '../../redux/chat/operations';
-import { selectChatRoomInProgress } from '../../redux/chat/selectors';
-import { addMessage } from '../../redux/chat/actions';
+import { MenuIcon, AttachIcon, SendIcon } from '@/images/svg';
+import { iconColors } from '@/helpers';
+import { DestructiveBtn, SecondaryBtn } from '@/components/Button';
+import { Loader } from '@/components/Loader';
+import { sendFile } from '@/redux/chat/operations';
+import { selectChatRoomInProgress } from '@/redux/chat/selectors';
+import { addMessage } from '@/redux/chat/actions';
 
 export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
   const dispatch = useDispatch();

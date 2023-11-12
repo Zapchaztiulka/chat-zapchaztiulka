@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import tailwindcss from '../../../tailwind.config.js';
+import { bgColors } from '@/helpers';
 import './styles.css';
 
 export const SecondaryGreyBtn = ({
@@ -12,7 +12,6 @@ export const SecondaryGreyBtn = ({
   onClick,
 }) => {
   const navigate = useNavigate();
-  const tailwindColors = tailwindcss.theme.extend.colors;
 
   const handleButtonClick = () => {
     if (onClick) {
@@ -25,7 +24,7 @@ export const SecondaryGreyBtn = ({
     <button
       className="second-grey"
       style={{
-        backgroundColor: pressed && tailwindColors.bgColors.pressedGrey,
+        backgroundColor: pressed && bgColors.pressedGrey,
       }}
       onClick={handleButtonClick}
     >

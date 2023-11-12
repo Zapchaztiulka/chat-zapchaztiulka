@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import { formatDate } from '../../helpers';
+import { formatDate } from '@/helpers';
 
 export const MessageCard = React.memo(
   ({ owner = 'Бот', text, type, time = Date.now() }) => {

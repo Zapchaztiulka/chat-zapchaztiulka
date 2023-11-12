@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-import { SecondaryGreyBtn, DestructiveBtn } from '../Button';
-import { AlertIcon } from '../../images/svg';
+import { SecondaryGreyBtn, DestructiveBtn } from '@/components/Button';
+import { AlertIcon } from '@/images/svg';
 
 const modalContainer = document.getElementById('modal-root');
 
