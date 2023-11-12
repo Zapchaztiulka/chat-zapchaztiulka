@@ -1,1 +1,0 @@
-import{j as r}from"./index-b8998446.js";import{S as e}from"./SearchBtnMini-39870a36.js";const n=()=>r.jsxs(r.Fragment,{children:[r.jsx("div",{children:"FAQPage"}),r.jsx(e,{to:"/",children:"Повернутися до меню"})]});export{n as default};
