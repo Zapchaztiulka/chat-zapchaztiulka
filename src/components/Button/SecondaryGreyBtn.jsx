@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
-import { ShopCartIcon } from '../../images/svg';
 import tailwindcss from '../../../tailwind.config.js';
 import './styles.css';
 
-export const DestructiveBtnWithIcon = ({
+export const SecondaryGreyBtn = ({
   children,
   to,
   disabled,
@@ -24,24 +23,20 @@ export const DestructiveBtnWithIcon = ({
 
   return !disabled ? (
     <button
-      className="destructive with-icon"
+      className="second-grey"
       style={{
-        backgroundColor: pressed && tailwindColors.bgColors.pressedDestructive,
+        backgroundColor: pressed && tailwindColors.bgColors.pressedGrey,
       }}
       onClick={handleButtonClick}
     >
-      <ShopCartIcon colorFill={tailwindColors.iconColors.contrast} />
       {children}
     </button>
   ) : (
-    <button className="destructive-disabled with-icon">
-      <ShopCartIcon colorFill={tailwindColors.iconColors.disabled} />
-      {children}
-    </button>
+    <button className="second-grey-disabled">{children}</button>
   );
 };
 
-DestructiveBtnWithIcon.propTypes = {
+SecondaryGreyBtn.propTypes = {
   children: PropTypes.node,
   to: PropTypes.string,
   disabled: PropTypes.bool,

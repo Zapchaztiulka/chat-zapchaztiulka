@@ -42,7 +42,7 @@ export const Header = () => {
         <div className="logo-wrapper">
           <img src={logo} alt="logo" />
         </div>
-        <div className="second-wrapper">
+        <div className="flex w-full justify-between items-center">
           <div className="title">Онлайн підтримка</div>
           <button
             className={chatVisible ? 'arrow-down' : 'arrow-up'}

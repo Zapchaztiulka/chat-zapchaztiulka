@@ -3,10 +3,6 @@
   mx-auto py-2 px-6 tablet:py-3 tablet:px-7 desktop:py-4 desktop:px-8 w-screen bg-bgColors-brandDark;
 }
 
-.second-wrapper {
-  @apply flex w-full justify-between items-center;
-}
-
 .logo-wrapper {
   @apply w-11 h-11 tablet:w-14 tablet:h-14 desktop:w-20 desktop:h-20 flex justify-center;
 }

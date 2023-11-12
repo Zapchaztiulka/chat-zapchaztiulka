@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-import { SecondGreyBtn, DestructiveBtn } from '../Button';
+import { SecondaryGreyBtn, DestructiveBtn } from '../Button';
 import { AlertIcon } from '../../images/svg';
 
 const modalContainer = document.getElementById('modal-root');
@@ -50,7 +50,7 @@ export const ModalWarning = ({ onFinishChat, closeModal }) => {
           </div>
         </div>
         <div className="flex gap-xs justify-between">
-          <SecondGreyBtn onClick={closeModal}>Скасувати</SecondGreyBtn>
+          <SecondaryGreyBtn onClick={closeModal}>Скасувати</SecondaryGreyBtn>
           <DestructiveBtn to="/" onClick={() => onFinishChat()}>
             Так, завершити
           </DestructiveBtn>

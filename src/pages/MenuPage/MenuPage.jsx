@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import './styles.css';
 import { selectChat } from '../../redux/chat/selectors';
-import { MessageTemplate } from '../../components/MessageTemplate';
+import { MessageCard } from '../../components/MessageCard';
 import { Container } from '../../utils';
 import { welcomeChatBot } from '../../helpers';
 
@@ -13,11 +13,7 @@ export const MenuPage = () => {
   return (
     <Container>
       <nav className="nav-wrapper">
-        <MessageTemplate
-          type="text"
-          text={welcomeChatBot}
-          time={chat.createdAt}
-        />
+        <MessageCard type="text" text={welcomeChatBot} time={chat.createdAt} />
         <div className="nav-link-wrapper">
           <NavLink className="nav-link" to="/faq">
             Найпоширеніші запитання

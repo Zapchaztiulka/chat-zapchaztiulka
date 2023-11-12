@@ -5,7 +5,7 @@ import { socket } from '../../socket';
 
 import './styles.css';
 import { Footer } from '../../components/Footer';
-import { MessageTemplate } from '../../components/MessageTemplate';
+import { MessageCard } from '../../components/MessageCard';
 import { PrimaryBtn } from '../../components/Button';
 import { BtnLoader } from '../../components/Loader';
 import { ModalWarning } from '../../components/Modal';
@@ -38,6 +38,8 @@ export const ChatPage = () => {
 
   const messageContainerRef = useRef(null);
   const userId = localStorage.getItem('userId');
+
+  const { _id, managerName, managerSurname } = chatRoomInProgress;
 
   // send token to the server for authentication
   useEffect(() => {
@@ -89,7 +91,7 @@ export const ChatPage = () => {
   // handle to typing by Manager
   useEffect(() => {
     socket.on('managerTyping', ({ isTyping, roomId }) => {
-      if (isTyping && roomId === chatRoomInProgress?._id) {
+      if (isTyping && _id && roomId === _id) {
         setIsTyping(true);
       } else setIsTyping(false);
     });
@@ -97,7 +99,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('managerTyping');
     };
-  }, [chatRoomInProgress?._id]);
+  }, [_id]);
 
   // update status in Redux store when user enters or quits
   useEffect(() => {
@@ -144,8 +146,6 @@ export const ChatPage = () => {
   useEffect(() => {
     socket.on('disconnectManager', rooms => {
       if (chatRoomInProgress) {
-        const { _id, managerName, managerSurname } = chatRoomInProgress;
-
         const roomIndex = rooms.findIndex(room => {
           return room._id === _id;
         });
@@ -174,7 +174,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('disconnectManager');
     };
-  }, [chatRoomInProgress, dispatch]);
+  }, [_id, chatRoomInProgress, dispatch, managerName, managerSurname]);
 
   // automatic scroll when new message is added
   useEffect(() => {
@@ -193,7 +193,7 @@ export const ChatPage = () => {
     if (chatRoomInProgress) {
       dispatch(
         closeChatRoom({
-          chatRoomId: chatRoomInProgress._id,
+          chatRoomId: _id,
           userId,
           username: user.username,
           userSurname: user.userSurname,
@@ -220,7 +220,7 @@ export const ChatPage = () => {
           className="flex flex-col gap-5 py-5 message-container"
         >
           {chatRoomInProgress && (
-            <MessageTemplate
+            <MessageCard
               type="text"
               text={welcomeStartChat}
               time={chatRoomInProgress?.createdAt}
@@ -233,17 +233,17 @@ export const ChatPage = () => {
                 messageOwner,
                 messageText,
                 messageType,
-                createdAt = Date.now(),
+                createdAt,
               } = message;
               return (
-                <MessageTemplate
+                <MessageCard
                   key={_id}
                   owner={
                     messageOwner === 'user'
                       ? 'Ви'
                       : messageOwner === 'Бот'
                       ? 'Бот'
-                      : `Менеджер ${chatRoomInProgress.managerName} ${chatRoomInProgress.managerSurname}`
+                      : `Менеджер ${managerName} ${managerSurname}`
                   }
                   type={messageType}
                   text={messageText}
@@ -264,7 +264,7 @@ export const ChatPage = () => {
             </div>
           )}
           {!chatRoomInProgress && (
-            <MessageTemplate
+            <MessageCard
               type="text"
               text="Менеджер завершив чат. Для продовження перейдіть в Головне меню"
               time={Date.now()}
