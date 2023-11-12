@@ -1,12 +1,11 @@
 .nav-wrapper {
-  @apply flex flex-col gap-3 py-5;
+  @apply flex flex-col gap-xs py-sPlus;
 }
 
 .nav-link-wrapper {
-  @apply font-sans font-medium text-sm tracking-button
-   text-textColors-brand flex flex-col gap-2;
+  @apply font-500 text-caption text-textBrand flex flex-col gap-xs2;
 }
 .nav-link {
-  @apply w-fit px-3 py-2 border border-solid border-borderColors-defaultBlue
-   hover:bg-bgColors-hoverGrey rounded-medium;
+  @apply w-fit px-xs py-xs2 border-1 border-solid border-borderDefaultBlue
+   hover:bg-bgHoverGrey rounded-medium;
 }

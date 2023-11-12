@@ -1,7 +1,6 @@
-import errorPage from '../../images/404-page.gif';
-
-import { PrimaryBtn } from '../../components/Button';
 import './styles.css';
+import { PrimaryBtn } from '@/components/Button';
+import errorPage from '@/images/404-page.gif';
 
 export const NotFoundPage = () => {
   return (

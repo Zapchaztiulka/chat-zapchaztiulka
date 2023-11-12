@@ -2,10 +2,10 @@ import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import './styles.css';
-import { selectChat } from '../../redux/chat/selectors';
-import { MessageCard } from '../../components/MessageCard';
-import { Container } from '../../utils';
-import { welcomeChatBot } from '../../helpers';
+import { selectChat } from '@/redux/chat/selectors';
+import { MessageCard } from '@/components/MessageCard';
+import { Container } from '@/utils';
+import { welcomeChatBot } from '@/helpers';
 
 export const MenuPage = () => {
   const chat = useSelector(selectChat);
