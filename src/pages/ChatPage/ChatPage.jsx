@@ -193,7 +193,7 @@ export const ChatPage = () => {
     if (chatRoomInProgress) {
       dispatch(
         closeChatRoom({
-          chatRoomId: _id,
+          chatRoomId: chatRoomInProgress._id,
           userId,
           username: user.username,
           userSurname: user.userSurname,
