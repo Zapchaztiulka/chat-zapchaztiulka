@@ -1,1 +1,0 @@
-import{j as a}from"./index-994ae26a.js";import{P as s}from"./DestructiveBtn-aa7f7c1a.js";const t="/chat-zapchaztiulka/assets/404-page-d03ade57.gif",o=()=>a.jsxs("div",{className:"wrapper",children:[a.jsx("img",{className:"image",src:t,alt:""}),a.jsx("div",{className:"title",children:"Oops! Page not found"}),a.jsx(s,{to:"/",children:"Go back to chat"})]});export{o as default};
