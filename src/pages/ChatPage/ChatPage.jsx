@@ -39,8 +39,6 @@ export const ChatPage = () => {
   const messageContainerRef = useRef(null);
   const userId = localStorage.getItem('userId');
 
-  const { _id, managerName, managerSurname } = chatRoomInProgress;
-
   // send token to the server for authentication
   useEffect(() => {
     socket.emit('authentication', { token: storedToken });
@@ -91,6 +89,7 @@ export const ChatPage = () => {
   // handle to typing by Manager
   useEffect(() => {
     socket.on('managerTyping', ({ isTyping, roomId }) => {
+      const { _id } = chatRoomInProgress;
       if (isTyping && _id && roomId === _id) {
         setIsTyping(true);
       } else setIsTyping(false);
@@ -99,7 +98,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('managerTyping');
     };
-  }, [_id]);
+  }, [chatRoomInProgress]);
 
   // update status in Redux store when user enters or quits
   useEffect(() => {
@@ -145,6 +144,7 @@ export const ChatPage = () => {
   // when manager disconnect Redux store is updated
   useEffect(() => {
     socket.on('disconnectManager', rooms => {
+      const { _id, managerName, managerSurname } = chatRoomInProgress;
       if (chatRoomInProgress) {
         const roomIndex = rooms.findIndex(room => {
           return room._id === _id;
@@ -174,7 +174,7 @@ export const ChatPage = () => {
     return () => {
       socket.off('disconnectManager');
     };
-  }, [_id, chatRoomInProgress, dispatch, managerName, managerSurname]);
+  }, [chatRoomInProgress, dispatch]);
 
   // automatic scroll when new message is added
   useEffect(() => {
@@ -235,6 +235,7 @@ export const ChatPage = () => {
                 messageType,
                 createdAt,
               } = message;
+              const { managerName, managerSurname } = chatRoomInProgress;
               return (
                 <MessageCard
                   key={_id}
