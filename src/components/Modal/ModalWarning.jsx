@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { Button } from 'universal-components-frontend/src/components';
 
-import { SecondaryGreyBtn, DestructiveBtn } from '@/components/Button';
 import { AlertIcon } from '@/images/svg';
 
 const modalContainer = document.getElementById('modal-root');
@@ -50,10 +50,16 @@ export const ModalWarning = ({ onFinishChat, closeModal }) => {
           </div>
         </div>
         <div className="flex gap-xs justify-between">
-          <SecondaryGreyBtn onClick={closeModal}>Скасувати</SecondaryGreyBtn>
-          <DestructiveBtn to="/" onClick={() => onFinishChat()}>
-            Так, завершити
-          </DestructiveBtn>
+          <Button
+            buttonType="secondary-gray"
+            text="Скасувати"
+            onClick={closeModal}
+          />
+          <Button
+            buttonType="desctructive"
+            text="Так, завершити"
+            onClick={() => onFinishChat()}
+          />
         </div>
       </div>
     </div>,

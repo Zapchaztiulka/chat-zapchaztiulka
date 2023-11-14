@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { socket } from '@/socket';
 
 import './styles.css';
 import { Footer } from '@/components/Footer';
 import { MessageCard } from '@/components/MessageCard';
-import { PrimaryBtn } from '@/components/Button';
 import { BtnLoader } from '@/components/Loader';
 import { ModalWarning } from '@/components/Modal';
 import { Container } from '@/utils';
@@ -27,6 +27,7 @@ import { createChatRoom, closeChatRoom } from '../../redux/chat/operations';
 
 export const ChatPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -201,6 +202,8 @@ export const ChatPage = () => {
       );
       setIsActiveMenu(false);
       setIsOpenModal(false);
+
+      navigate('/');
     }
   };
 
@@ -253,15 +256,11 @@ export const ChatPage = () => {
               );
             })}
           {isTyping && (
-            <div>
-              <PrimaryBtn disabled>
-                <div className="flex gap-xs2">
-                  <div className="font-400 text-caption text-textTertiary">
-                    Менеджер друкує повідомлення
-                  </div>
-                  <BtnLoader height={20} width={48} radius={8} />
-                </div>
-              </PrimaryBtn>
+            <div className="flex gap-xs2">
+              <div className="font-400 text-caption text-textTertiary">
+                Менеджер друкує повідомлення
+              </div>
+              <BtnLoader height={20} width={48} radius={8} />
             </div>
           )}
           {!chatRoomInProgress && (

@@ -7,6 +7,12 @@ import autoprefixer from 'autoprefixer';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  optimizeDeps: {
+    esbuildOptions: {
+      jsx: 'automatic',
+    },
+  },
+
   plugins: [react(), svgr()],
 
   base: '/chat-zapchaztiulka/',
@@ -21,5 +27,9 @@ export default defineConfig({
     alias: {
       '@': '/src',
     },
+  },
+
+  server: {
+    port: 5173,
   },
 });

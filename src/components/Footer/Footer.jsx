@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import _debounce from 'lodash/debounce';
 import { socket } from '@/socket';
+import { Button } from 'universal-components-frontend/src/components';
 
 import './styles.css';
 
 import { MenuIcon, AttachIcon, SendIcon } from '@/images/svg';
-import { DestructiveBtn, SecondaryBtn } from '@/components/Button';
 import { Loader } from '@/components/Loader';
 import { sendFile } from '@/redux/chat/operations';
 import { selectChatRoomInProgress } from '@/redux/chat/selectors';
@@ -27,15 +26,24 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
   const [isSendingFile, setIsSendingFile] = useState(false);
   const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [handleTypingExecuted, setHandleTypingExecuted] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(null);
 
   const userId = localStorage.getItem('userId');
 
   let typingTimeout;
 
   // handle to send emit when user is typing
-  const handleTyping = _debounce(isTyping => {
-    socket.emit('userTyping', { isTyping, roomId: chatRoomInProgress._id });
-  }, 1000);
+  const handleTyping = useCallback(
+    isTyping => {
+      socket.emit('userTyping', {
+        isTyping,
+        roomId: chatRoomInProgress._id,
+      });
+      setHandleTypingExecuted(isTyping);
+    },
+    [chatRoomInProgress?._id]
+  );
 
   // handle to input with auto extending of input field
   const handleMessageChange = evt => {
@@ -53,14 +61,17 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
     setRows(currentRows);
     rowsRef.current = currentRows;
 
-    handleTyping(true);
+    if (!handleTypingExecuted) {
+      handleTyping(true);
+    }
 
-    // Additionally - if the user stops entering text,
-    // but cursor is in input field - we assume that he has stopped typing too
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => {
+    // If the user stops entering text, but cursor is in input field - we assume that he has stopped typing too
+    clearTimeout(timeoutId);
+    const delayedFunction = () => {
       handleTyping(false);
-    }, 2000);
+    };
+    const id = setTimeout(delayedFunction, 3000);
+    setTimeoutId(id);
   };
 
   // handle a text message
@@ -83,6 +94,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
     });
 
     socket.emit('userMessage', messageData);
+    handleTyping(false); // if user sent a message, we assume that he has stopped typing
 
     setMessage('');
     setRows(1);
@@ -113,6 +125,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
           });
 
           socket.emit('userMessage', messageData);
+          handleTyping(false); // if user sent an image, we assume that he has stopped typing
         })
         .catch(() =>
           toast.error('Не вдалося завантажити фото. Спробуйте повторити')
@@ -245,16 +258,17 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
           </div>
           {activeMenu && (
             <div className="flex gap-xs py-xs justify-center fade-in">
-              <SecondaryBtn
-                to="/"
+              <Button
+                buttonType="secondary"
+                text="Головне меню"
                 disabled={chatRoomInProgress?.isChatRoomProcessed}
                 onClick={() => onFinishChat()}
-              >
-                Головне меню
-              </SecondaryBtn>
-              <DestructiveBtn onClick={() => isOpenModal()}>
-                Завершити діалог
-              </DestructiveBtn>
+              />
+              <Button
+                buttonType="desctructive"
+                text="Завершити діалог"
+                onClick={() => isOpenModal()}
+              />
             </div>
           )}
         </footer>
