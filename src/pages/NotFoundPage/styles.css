@@ -7,5 +7,5 @@
 }
 
 .title {
-  @apply mb-sPlus px-sPlus font-600 text-body text-center;
+  @apply mb-sPlus px-sPlus font-600 text-body text-center text-textBrand;
 }

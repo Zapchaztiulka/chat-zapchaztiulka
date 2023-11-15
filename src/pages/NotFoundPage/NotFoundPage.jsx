@@ -11,7 +11,12 @@ export const NotFoundPage = () => {
     <div className="wrapper">
       <img className="image" src={errorPage} alt="" />
       <div className="title">Oops! Page not found</div>
-      <Button text="Go back to chat" onClick={() => navigate('/')} />
+      <Button
+        // delete className after adjusting to get button from universal components
+        className="font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300 focus:outline-none min-w-[150px] bg-bgBrandDark text-textContrast py-xs px-m leading-6 hover:bg-bgHoverBlue focus:shadow-btFocus  active:bg-bgPressedBlue h-[48px]"
+        text="Go back to chat"
+        onClick={() => navigate('/')}
+      />
     </div>
   );
 };

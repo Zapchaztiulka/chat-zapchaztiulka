@@ -52,11 +52,15 @@ export const ModalWarning = ({ onFinishChat, closeModal }) => {
         <div className="flex gap-xs justify-between">
           <Button
             buttonType="secondary-gray"
+            // delete className after adjusting to get button from universal components
+            className="font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300  focus:outline-none min-w-[150px] bg-bgWhite text-textPrimary border-solid border-1 border-borderDefault py-xs px-m leading-6 hover:bg-bgHoverGrey focus:shadow-btFocus  active:bg-bgPressedGrey active:border-borderDefault h-[48px]"
             text="Скасувати"
             onClick={closeModal}
           />
           <Button
             buttonType="desctructive"
+            // delete className after adjusting to get button from universal components
+            className="font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300 focus:outline-none min-w-[150px] text-textContrast bg-bgDefaultDestructive py-xs px-m leading-6 hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus disabled:border-solid  disabled:border-1 disabled:border-borderDisabled active:bg-bgPressedDestructive h-[48px]"
             text="Так, завершити"
             onClick={() => onFinishChat()}
           />

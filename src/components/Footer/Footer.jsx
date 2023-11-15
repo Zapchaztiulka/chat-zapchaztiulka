@@ -261,11 +261,15 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
               <Button
                 buttonType="secondary"
                 text="Головне меню"
+                // delete className after adjusting to get button from universal components
+                className="font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300 focus:outline-none min-w-[150px] bg-bgWhite text-textBrand border-solid border-1 border-borderDefaultBlue px-m leading-6 hover:bg-bgHoverGrey focus:shadow-btFocus disabled:border-borderDisabled active:bg-bgPressedGrey h-[48px] py-xs"
                 disabled={chatRoomInProgress?.isChatRoomProcessed}
                 onClick={() => onFinishChat()}
               />
               <Button
                 buttonType="desctructive"
+                // delete className after adjusting to get button from universal components
+                className="font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300 focus:outline-none min-w-[150px] text-textContrast bg-bgDefaultDestructive py-xs px-m leading-6 hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus disabled:border-solid  disabled:border-1 disabled:border-borderDisabled active:bg-bgPressedDestructive h-[48px]"
                 text="Завершити діалог"
                 onClick={() => isOpenModal()}
               />

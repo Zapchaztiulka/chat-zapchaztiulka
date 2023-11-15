@@ -48,8 +48,8 @@ export const App = () => {
             <Route path="/faq" element={<FAQPage />} />
             <Route path="/order-details" element={<OrderDetailsPage />} />
             <Route path="/chat" element={<ChatPage />} />
-            <Route path="*" element={<NotFoundPage />} />
           </Route>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <ToastContainer autoClose={3000} />
       </Suspense>
