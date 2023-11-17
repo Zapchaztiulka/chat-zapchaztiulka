@@ -27,16 +27,13 @@ export const App = () => {
 
     const searchParams = new URLSearchParams(location.search);
     const userIdParam = searchParams.get('userId');
-    const storedUserId =
-      localStorage.getItem('userId') || customAlphabet('0123456789', 24)();
+    const userId =
+      userIdParam ||
+      localStorage.getItem('userId') ||
+      customAlphabet('0123456789', 24)();
 
-    if (userIdParam) {
-      localStorage.setItem('userId', userIdParam);
-      dispatch(authUser(userIdParam));
-    } else {
-      localStorage.setItem('userId', storedUserId);
-      dispatch(authUser(storedUserId));
-    }
+    localStorage.setItem('userId', userId);
+    dispatch(authUser(userId));
   }, [dispatch, existingChat._id, location.search]);
 
   return (

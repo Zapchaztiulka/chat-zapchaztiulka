@@ -16,7 +16,7 @@ export const Header = () => {
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const userId = localStorage.getItem('userId');
 
-  // handle changing of active chat when user unfolded or rolled up it
+  // handle changing of active chat when user minimizes or extends it
   const toggleChatVisibility = () => {
     setChatVisible(!chatVisible);
 
@@ -34,6 +34,7 @@ export const Header = () => {
         payload: chatRoomOpenChanged,
       });
     }
+    socket.emit('minimizeChat', { userId, isChatRoomOpen: !chatVisible });
   };
 
   return (
@@ -42,7 +43,7 @@ export const Header = () => {
         <div className="logo-wrapper">
           <img src={logo} alt="logo" />
         </div>
-        <div className="flex w-full justify-between items-center">
+        <div className="flex w-full justify-between pr-xs items-center">
           <div className="title">Онлайн підтримка</div>
           <button
             className={chatVisible ? 'arrow-down' : 'arrow-up'}
