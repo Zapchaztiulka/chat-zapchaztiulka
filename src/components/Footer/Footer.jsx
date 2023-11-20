@@ -9,6 +9,8 @@ import './styles.css';
 
 import { MenuIcon, AttachIcon, SendIcon } from '@/images/svg';
 import { Loader } from '@/components/Loader';
+import { compressAndResizeImage } from '@/helpers';
+
 import { sendFile } from '@/redux/chat/operations';
 import { selectChatRoomInProgress } from '@/redux/chat/selectors';
 import { addMessage } from '@/redux/chat/actions';
@@ -141,13 +143,19 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
   };
 
   // handle a previous view of image before uploading
-  const handleFileChange = event => {
+  const handleFileChange = async event => {
     const file = event.target.files[0];
     setSelectedFile(file);
     setFileSelected(true);
 
-    const tempURL = URL.createObjectURL(file);
-    setTemporaryImageURL(tempURL);
+    // compress and resize the image with a maximum width of 200 and maximum height of 200, and a quality of 0.8
+    try {
+      const compressedImage = await compressAndResizeImage(file, 200, 200, 0.8);
+
+      setTemporaryImageURL(compressedImage);
+    } catch (error) {
+      toast.error('Помилка завантаження фото. Будь-ласка повторіть спробу');
+    }
   };
 
   // handle to open window to choose image-file for uploading
