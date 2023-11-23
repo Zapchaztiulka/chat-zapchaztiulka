@@ -1,19 +1,15 @@
-import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import './styles.css';
-import { selectChat } from '@/redux/chat/selectors';
 import { MessageCard } from '@/components/MessageCard';
 import { Container } from '@/utils';
 import { welcomeChatBot } from '@/helpers';
 
 export const MenuPage = () => {
-  const chat = useSelector(selectChat);
-
   return (
     <Container>
       <nav className="nav-wrapper">
-        <MessageCard type="text" text={welcomeChatBot} time={chat.createdAt} />
+        <MessageCard type="text" text={welcomeChatBot} time="hidden" />
         <div className="nav-link-wrapper">
           <NavLink className="nav-link" to="/faq">
             Найпоширеніші запитання

@@ -32,9 +32,11 @@ export const MessageCard = React.memo(
               <img src={text} alt={`Image ${time}`} />
             </div>
           )}
-          <p className="text-[10px] text-textTertiary self-end">
-            {formatDate(time)}
-          </p>
+          {time !== 'hidden' && (
+            <p className="text-[10px] text-textTertiary self-end">
+              {formatDate(time)}
+            </p>
+          )}
         </div>
       </>
     );

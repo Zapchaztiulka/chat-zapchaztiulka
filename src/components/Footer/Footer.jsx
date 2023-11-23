@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { socket } from '@/socket';
 import { Button } from 'universal-components-frontend/src/components';
@@ -15,8 +16,9 @@ import { sendFile } from '@/redux/chat/operations';
 import { selectChatRoomInProgress } from '@/redux/chat/selectors';
 import { addMessage } from '@/redux/chat/actions';
 
-export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
+export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
   const [activeMenu, setActiveMenu] = useState(false);
   const [message, setMessage] = useState('');
@@ -40,7 +42,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
     isTyping => {
       socket.emit('userTyping', {
         isTyping,
-        roomId: chatRoomInProgress._id,
+        roomId: chatRoomInProgress?._id,
       });
       setHandleTypingExecuted(isTyping);
     },
@@ -206,8 +208,8 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <footer className="absolute bottom-[0] w-full">
-          <div className="relative items-center bg-bgWhite">
+        <footer className="absolute bottom-[0] w-full bg-bgWhite">
+          <div className="relative items-center">
             <textarea
               className="input-style"
               type="text"
@@ -223,13 +225,22 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
               <>
                 <button
                   type="button"
-                  className="icon-style"
+                  className="icon-style button-wrapper"
                   style={{ right: '44px' }}
                   onClick={toggleMenu}
                 >
                   <MenuIcon activeMenu={activeMenu} />
+                  <div
+                    className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
+                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
+                  >
+                    {activeMenu ? 'Сховати меню' : 'Показати меню'}
+                  </div>
                 </button>
-                <button className="icon-style" onClick={openFileInput}>
+                <button
+                  className="icon-style button-wrapper"
+                  onClick={openFileInput}
+                >
                   <input
                     type="file"
                     style={{ display: 'none' }}
@@ -237,13 +248,19 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
                     ref={fileInputRef}
                   />
                   <AttachIcon />
+                  <div
+                    className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
+                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
+                  >
+                    Прикріпити фото .jpg, .jpeg, .png, .gif
+                  </div>
                 </button>
               </>
             )}
             {(fileSelected || message) && (
               <button
                 type="submit"
-                className="icon-style"
+                className="icon-style button-wrapper"
                 onClick={
                   message && fileSelected
                     ? () => {
@@ -256,6 +273,12 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
                 }
               >
                 <SendIcon />
+                <div
+                  className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
+                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
+                >
+                  Відправити повідомлення
+                </div>
               </button>
             )}
             {temporaryImageURL && (
@@ -272,19 +295,21 @@ export const Footer = ({ isActiveMenu, isOpenModal, onFinishChat }) => {
                 // delete className after adjusting to get button from universal components
                 className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors 
                 duration-300 focus:outline-none min-w-[150px] h-[48px] bg-bgWhite text-textBrand border-solid border-1
-                 border-borderDefaultBlue py-xs px-m leading-6 hover:bg-bgHoverGrey focus:shadow-btFocus
+                 border-borderDefaultBlue py-xs leading-6 hover:bg-bgHoverGrey focus:shadow-btFocus
                  ${
                    chatRoomInProgress?.isChatRoomProcessed &&
                    'text-textDisabled border-borderDisabled bg-bgDisable cursor-not-allowed pointer-events-none'
-                 }`}
-                onClick={() => onFinishChat()}
+                 } ${isTablet ? 'px-m' : 'px-s'}`}
+                onClick={() => navigate('/')}
               />
               <Button
                 buttonType="desctructive"
                 // delete className after adjusting to get button from universal components
-                className="font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors 
+                className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors 
                 duration-300 focus:outline-none min-w-[150px] h-[48px] text-textContrast bg-bgDefaultDestructive py-xs
-                px-m leading-6 hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus"
+                leading-6 hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus ${
+                  isTablet ? 'px-m' : 'px-s'
+                }`}
                 text="Завершити діалог"
                 onClick={() => isOpenModal()}
               />
@@ -300,4 +325,5 @@ Footer.propTypes = {
   isActiveMenu: PropTypes.bool.isRequired,
   isOpenModal: PropTypes.func.isRequired,
   onFinishChat: PropTypes.func,
+  isTablet: PropTypes.bool.isRequired,
 };

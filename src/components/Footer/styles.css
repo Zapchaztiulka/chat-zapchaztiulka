@@ -26,3 +26,7 @@
 .fade-in {
   animation: fade-in 500ms ease forwards;
 }
+
+.button-wrapper:hover .description {
+  display: block;
+}

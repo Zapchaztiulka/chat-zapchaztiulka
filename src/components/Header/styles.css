@@ -11,10 +11,6 @@
   @apply font-500 text-heading4 text-textContrast;
 }
 
-.arrow-up {
-  @apply rotate-180 transition-transform;
-}
-
-.arrow-down {
-  @apply rotate-0 transition-transform;
+.button-wrapper:hover .description {
+  display: block;
 }

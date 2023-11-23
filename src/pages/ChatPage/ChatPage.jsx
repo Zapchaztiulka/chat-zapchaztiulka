@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +11,7 @@ import { MessageCard } from '@/components/MessageCard';
 import { BtnLoader } from '@/components/Loader';
 import { ModalWarning } from '@/components/Modal';
 import { Container } from '@/utils';
-import { welcomeStartChat } from '@/helpers';
+import { welcomeStartChat, getUnreadMessages } from '@/helpers';
 
 import {
   updateUserStatus,
@@ -25,7 +26,7 @@ import {
 } from '../../redux/chat/selectors';
 import { createChatRoom, closeChatRoom } from '../../redux/chat/operations';
 
-export const ChatPage = () => {
+export const ChatPage = ({ isTablet }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,6 +40,18 @@ export const ChatPage = () => {
 
   const messageContainerRef = useRef(null);
   const userId = localStorage.getItem('userId');
+
+  // handle to send emit with a count of unread manager messages by User
+  useEffect(() => {
+    if (chatRoomInProgress) {
+      const { messages } = chatRoomInProgress;
+      const countUnreadManagerMessages = getUnreadMessages(messages);
+      socket.emit('countUnreadManagerMessages', {
+        userId,
+        countUnreadManagerMessages,
+      });
+    }
+  }, [chatRoomInProgress, userId]);
 
   // send token to the server for authentication
   useEffect(() => {
@@ -177,18 +190,6 @@ export const ChatPage = () => {
     };
   }, [chatRoomInProgress, dispatch]);
 
-  // automatic scroll when new message is added
-  useEffect(() => {
-    if (messageContainerRef.current) {
-      const scrollHeight = messageContainerRef.current.scrollHeight;
-      const maxVisibleHeight = messageContainerRef.current.clientHeight;
-
-      if (scrollHeight > maxVisibleHeight) {
-        messageContainerRef.current.scrollTop = scrollHeight - maxVisibleHeight;
-      }
-    }
-  }, [chatRoomInProgress, isTyping]);
-
   // handle closing of chat room
   const handleCloseChat = () => {
     if (chatRoomInProgress) {
@@ -210,6 +211,18 @@ export const ChatPage = () => {
   // handle to open modal window to approve of closing chat
   const handleOpenModal = () => setIsOpenModal(true);
 
+  // automatic scroll when new message is added
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      const scrollHeight = messageContainerRef.current.scrollHeight;
+      const maxVisibleHeight = messageContainerRef.current.clientHeight;
+
+      if (scrollHeight > maxVisibleHeight) {
+        messageContainerRef.current.scrollTop = scrollHeight - maxVisibleHeight;
+      }
+    }
+  }, [chatRoomInProgress, isTyping]);
+
   // not render if user is not authenticated
   if (!isAuthenticated) {
     return null;
@@ -220,7 +233,9 @@ export const ChatPage = () => {
       <Container>
         <section
           ref={messageContainerRef}
-          className="flex flex-col gap-sPlus py-sPlus message-container"
+          className={`flex flex-col gap-sPlus 
+          ${isTablet ? 'max-h-[83vh] py-sPlus' : 'max-h-[400px] py-s'}
+           message-container`}
         >
           {chatRoomInProgress && (
             <MessageCard
@@ -275,6 +290,7 @@ export const ChatPage = () => {
           <ModalWarning
             onFinishChat={handleCloseChat}
             closeModal={() => setIsOpenModal(false)}
+            isTablet={isTablet}
           />
         )}
       </Container>
@@ -282,7 +298,12 @@ export const ChatPage = () => {
         isActiveMenu={isActiveMenu}
         isOpenModal={handleOpenModal}
         onFinishChat={handleCloseChat}
+        isTablet={isTablet}
       />
     </div>
   );
+};
+
+ChatPage.propTypes = {
+  isTablet: PropTypes.bool.isRequired,
 };

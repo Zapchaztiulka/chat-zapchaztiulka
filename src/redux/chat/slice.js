@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import { authUser, createChatRoom, closeChatRoom } from './operations';
 import {
   updateUserStatus,
-  updateIsChatRoomOpen,
   addMessage,
   updateManager,
   closeChatByManager,
@@ -128,16 +127,6 @@ export const chatSlice = createSlice({
 
       .addCase(updateUserStatus, (state, { payload }) => {
         state.isOnline = payload.isOnline;
-      })
-
-      .addCase(updateIsChatRoomOpen, (state, { payload }) => {
-        const roomIndex = state.chatRooms.findIndex(room => {
-          return room._id === payload.roomId;
-        });
-
-        if (roomIndex !== -1) {
-          state.chatRooms[roomIndex].isChatRoomOpen = payload.isChatRoomOpen;
-        }
       });
   },
 });
