@@ -1,3 +1,7 @@
+textarea::placeholder {
+  @apply whitespace-nowrap;
+}
+
 .input-style {
   @apply p-xs pr-xl4 w-full resize-y overflow-y-auto outline-none cursor-pointer
   hover:bg-bgHoverGrey hover:border-borderActive border-t-1 border-solid

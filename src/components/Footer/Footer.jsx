@@ -84,7 +84,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
 
     const messageData = {
       userId,
-      roomId: chatRoomInProgress._id,
+      roomId: chatRoomInProgress?._id,
       message: {
         messageOwner: 'user',
         messageType: 'text',
@@ -209,84 +209,86 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
         <Loader />
       ) : (
         <footer className="absolute bottom-[0] w-full bg-bgWhite">
-          <div className="relative items-center">
-            <textarea
-              className="input-style"
-              type="text"
-              placeholder="Введіть ваше повідомлення"
-              rows={rows}
-              value={message}
-              onChange={handleMessageChange}
-              onKeyDown={handleKeyDown}
-              onFocus={handleFocus}
-              onBlur={handleOnBlur}
-            />
-            {!message && !fileSelected && (
-              <>
+          {chatRoomInProgress && (
+            <div className="relative items-center">
+              <textarea
+                className="input-style"
+                type="text"
+                placeholder="Введіть ваше повідомлення"
+                rows={rows}
+                value={message}
+                onChange={handleMessageChange}
+                onKeyDown={handleKeyDown}
+                onFocus={handleFocus}
+                onBlur={handleOnBlur}
+              />
+              {!message && !fileSelected && (
+                <>
+                  <button
+                    type="button"
+                    className="icon-style button-wrapper"
+                    style={{ right: '44px' }}
+                    onClick={toggleMenu}
+                  >
+                    <MenuIcon activeMenu={activeMenu} />
+                    <div
+                      className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
+                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
+                    >
+                      {activeMenu ? 'Сховати меню' : 'Показати меню'}
+                    </div>
+                  </button>
+                  <button
+                    className="icon-style button-wrapper"
+                    onClick={openFileInput}
+                  >
+                    <input
+                      type="file"
+                      style={{ display: 'none' }}
+                      onChange={handleFileChange}
+                      ref={fileInputRef}
+                    />
+                    <AttachIcon />
+                    <div
+                      className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
+                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
+                    >
+                      Прикріпити фото .jpg, .jpeg, .png, .gif
+                    </div>
+                  </button>
+                </>
+              )}
+              {(fileSelected || message) && (
                 <button
-                  type="button"
+                  type="submit"
                   className="icon-style button-wrapper"
-                  style={{ right: '44px' }}
-                  onClick={toggleMenu}
+                  onClick={
+                    message && fileSelected
+                      ? () => {
+                          handleSubmitMessage();
+                          sendFileToServer();
+                        }
+                      : message
+                      ? handleSubmitMessage
+                      : sendFileToServer
+                  }
                 >
-                  <MenuIcon activeMenu={activeMenu} />
+                  <SendIcon />
                   <div
                     className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
                        bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
                   >
-                    {activeMenu ? 'Сховати меню' : 'Показати меню'}
+                    Відправити повідомлення
                   </div>
                 </button>
-                <button
-                  className="icon-style button-wrapper"
-                  onClick={openFileInput}
-                >
-                  <input
-                    type="file"
-                    style={{ display: 'none' }}
-                    onChange={handleFileChange}
-                    ref={fileInputRef}
-                  />
-                  <AttachIcon />
-                  <div
-                    className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
-                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
-                  >
-                    Прикріпити фото .jpg, .jpeg, .png, .gif
-                  </div>
-                </button>
-              </>
-            )}
-            {(fileSelected || message) && (
-              <button
-                type="submit"
-                className="icon-style button-wrapper"
-                onClick={
-                  message && fileSelected
-                    ? () => {
-                        handleSubmitMessage();
-                        sendFileToServer();
-                      }
-                    : message
-                    ? handleSubmitMessage
-                    : sendFileToServer
-                }
-              >
-                <SendIcon />
-                <div
-                  className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
-                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
-                >
-                  Відправити повідомлення
+              )}
+              {temporaryImageURL && (
+                <div className="bg-bgWhite ml-sPlus py-sPlus">
+                  <img src={temporaryImageURL} alt="Uploaded Image" />
                 </div>
-              </button>
-            )}
-            {temporaryImageURL && (
-              <div className="bg-bgWhite ml-sPlus py-sPlus">
-                <img src={temporaryImageURL} alt="Uploaded Image" />
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
           {activeMenu && (
             <div className="flex gap-xs py-xs justify-center fade-in">
               <Button

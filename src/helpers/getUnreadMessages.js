@@ -6,10 +6,14 @@ export const getUnreadMessages = messages => {
   }
 
   let count = 0;
-  while (lastIndex >= 0 && messages[lastIndex].messageOwner !== 'user') {
+  while (
+    lastIndex >= 0 &&
+    messages[lastIndex].messageOwner !== 'user' &&
+    messages[lastIndex].messageOwner !== 'Бот'
+  ) {
     count++;
     lastIndex--;
   }
 
-  return count;
+  return count || null;
 };
