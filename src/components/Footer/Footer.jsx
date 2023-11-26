@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { socket } from '@/socket';
-import { Button } from 'universal-components-frontend/src/components';
 
 import './styles.css';
 
@@ -308,10 +307,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
           )}
           {activeMenu && (
             <div className="flex gap-xs py-xs justify-center fade-in">
-              <Button
-                buttonType="secondary"
-                text="Головне меню"
-                // delete className after adjusting to get button from universal components
+              <button
                 className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors 
                 duration-300 focus:outline-none min-w-[150px] h-[48px] bg-bgWhite text-textBrand border-solid border-1
                  border-borderDefaultBlue py-xs leading-6 hover:bg-bgHoverGrey focus:shadow-btFocus
@@ -320,21 +316,26 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
                    'text-textDisabled border-borderDisabled bg-bgDisable cursor-not-allowed pointer-events-none'
                  } ${isTablet ? 'px-m' : 'px-s'}`}
                 onClick={() => navigate('/')}
-              />
-              <Button
-                buttonType="desctructive"
-                // delete className after adjusting to get button from universal components
-                className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors 
-                            duration-300  focus:outline-none min-w-[150px] h-[48px]  py-xs leading-6 
-                            ${isTablet ? 'px-m' : 'px-s'} 
+              >
+                Головне меню
+              </button>
+              <button
+                className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300
+                            focus:outline-none min-w-[150px] h-[48px]  py-xs leading-6 
+                            ${isTablet ? 'px-m' : 'px-s'}
                             ${
-                              chatRoomInProgress
-                                ? 'bg-bgDefaultDestructive text-textContrast hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus'
-                                : 'bg-bgDisable text-textDisabled border-solid  border-1 border-borderDisabled cursor-not-allowed hover:bg-bgDisable'
+                              chatRoomInProgress &&
+                              'bg-bgDefaultDestructive text-textContrast hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus'
+                            }
+                            ${
+                              !chatRoomInProgress &&
+                              'bg-bgDisable text-textDisabled border-solid  border-1 border-borderDisabled cursor-not-allowed hover:bg-bgDisable'
                             }`}
-                text="Завершити діалог"
+                disabled={!chatRoomInProgress}
                 onClick={() => isOpenModal()}
-              />
+              >
+                Завершити діалог
+              </button>
             </div>
           )}
         </footer>
