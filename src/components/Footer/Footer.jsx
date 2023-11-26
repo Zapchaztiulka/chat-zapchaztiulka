@@ -8,7 +8,7 @@ import { Button } from 'universal-components-frontend/src/components';
 
 import './styles.css';
 
-import { MenuIcon, AttachIcon, SendIcon } from '@/images/svg';
+import { MenuIcon, AttachIcon, SendIcon, CloseIcon } from '@/images/svg';
 import { Loader } from '@/components/Loader';
 import { compressAndResizeImage } from '@/helpers';
 
@@ -150,9 +150,9 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
     setSelectedFile(file);
     setFileSelected(true);
 
-    // compress and resize the image with a maximum width of 200 and maximum height of 200, and a quality of 0.8
+    // compress and resize the image with a certain maximum width and a quality
     try {
-      const compressedImage = await compressAndResizeImage(file, 200, 200, 0.8);
+      const compressedImage = await compressAndResizeImage(file, 250, 0.8);
 
       setTemporaryImageURL(compressedImage);
     } catch (error) {
@@ -261,7 +261,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
               {(fileSelected || message) && (
                 <button
                   type="submit"
-                  className="icon-style button-wrapper"
+                  className="icon-style button-wrapper z-10"
                   onClick={
                     message && fileSelected
                       ? () => {
@@ -283,8 +283,25 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
                 </button>
               )}
               {temporaryImageURL && (
-                <div className="bg-bgWhite ml-sPlus py-sPlus">
-                  <img src={temporaryImageURL} alt="Uploaded Image" />
+                <div className="ml-s py-sPlus">
+                  <div className="relative">
+                    <img
+                      className="border-1 border-solid border-borderDefault rounded-minimal"
+                      src={temporaryImageURL}
+                      alt="Uploaded Image"
+                    />
+                    <button
+                      className="absolute top-[-8px] left-[242px] border-1 bg-bgWhite border-solid
+                               border-borderDefault rounded-[50%] cursor-pointer hover:bg-bgHoverGrey
+                               hover:border-borderHover transition-colors duration-300"
+                      onClick={() => {
+                        setTemporaryImageURL(null);
+                        setFileSelected(false);
+                      }}
+                    >
+                      <CloseIcon />
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -308,10 +325,13 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
                 buttonType="desctructive"
                 // delete className after adjusting to get button from universal components
                 className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors 
-                duration-300 focus:outline-none min-w-[150px] h-[48px] text-textContrast bg-bgDefaultDestructive py-xs
-                leading-6 hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus ${
-                  isTablet ? 'px-m' : 'px-s'
-                }`}
+                            duration-300  focus:outline-none min-w-[150px] h-[48px]  py-xs leading-6 
+                            ${isTablet ? 'px-m' : 'px-s'} 
+                            ${
+                              chatRoomInProgress
+                                ? 'bg-bgDefaultDestructive text-textContrast hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus'
+                                : 'bg-bgDisable text-textDisabled border-solid  border-1 border-borderDisabled cursor-not-allowed hover:bg-bgDisable'
+                            }`}
                 text="Завершити діалог"
                 onClick={() => isOpenModal()}
               />
