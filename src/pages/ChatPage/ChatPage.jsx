@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { socket } from '@/socket';
 
-import './styles.css';
+import '@/index.css';
 import { Footer } from '@/components/Footer';
 import { MessageCard } from '@/components/MessageCard';
 import { BtnLoader } from '@/components/Loader';
@@ -297,8 +297,8 @@ export const ChatPage = ({ isTablet }) => {
       <Footer
         isActiveMenu={isActiveMenu}
         isOpenModal={handleOpenModal}
-        onFinishChat={handleCloseChat}
         isTablet={isTablet}
+        fromChatPage
       />
     </div>
   );

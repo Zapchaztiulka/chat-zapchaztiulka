@@ -3,3 +3,5 @@ export const welcomeChatBot =
 
 export const welcomeStartChat =
   'Напишіть питання, яке вас цікавить. Оператор приєднається до розмови за кілька хвилин';
+
+export const welcomeFAQ = 'Оберіть категорію запитань, яка вас цікавить:';

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { socket } from '@/socket';
 
 import './styles.css';
-
+import '@/index.css';
 import { MenuIcon, AttachIcon, SendIcon, CloseIcon } from '@/images/svg';
 import { Loader } from '@/components/Loader';
 import { compressAndResizeImage } from '@/helpers';
@@ -15,10 +15,17 @@ import { sendFile } from '@/redux/chat/operations';
 import { selectChatRoomInProgress } from '@/redux/chat/selectors';
 import { addMessage } from '@/redux/chat/actions';
 
-export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
+export const Footer = ({
+  isActiveMenu,
+  isOpenModal,
+  isTablet,
+  fromChatPage,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
+
   const [activeMenu, setActiveMenu] = useState(false);
   const [message, setMessage] = useState('');
   const [rows, setRows] = useState(1);
@@ -208,103 +215,119 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
         <Loader />
       ) : (
         <footer className="absolute bottom-[0] w-full bg-bgWhite">
-          {chatRoomInProgress && (
-            <div className="relative items-center">
-              <textarea
-                className="input-style"
-                type="text"
-                placeholder="Введіть ваше повідомлення"
-                rows={rows}
-                value={message}
-                onChange={handleMessageChange}
-                onKeyDown={handleKeyDown}
-                onFocus={handleFocus}
-                onBlur={handleOnBlur}
-              />
-              {!message && !fileSelected && (
-                <>
-                  <button
-                    type="button"
-                    className="icon-style button-wrapper"
-                    style={{ right: '44px' }}
-                    onClick={toggleMenu}
-                  >
-                    <MenuIcon activeMenu={activeMenu} />
+          <div className="relative items-center">
+            <textarea
+              className={`${
+                fromChatPage && chatRoomInProgress
+                  ? 'input-style'
+                  : 'input-style-disabled border-y-1'
+              }`}
+              type="text"
+              placeholder="Введіть ваше повідомлення"
+              rows={rows}
+              value={message}
+              onChange={handleMessageChange}
+              onKeyDown={handleKeyDown}
+              onFocus={handleFocus}
+              onBlur={handleOnBlur}
+              disabled={!fromChatPage || !chatRoomInProgress}
+            />
+            {!message && !fileSelected && (
+              <>
+                <button
+                  type="button"
+                  className="icon-style button-wrapper"
+                  style={{ right: '44px' }}
+                  onClick={toggleMenu}
+                  disabled={!fromChatPage || !chatRoomInProgress}
+                >
+                  <MenuIcon
+                    activeMenu={activeMenu}
+                    fromChatPage={fromChatPage}
+                    chatRoomInProgress={chatRoomInProgress}
+                  />
+                  {fromChatPage && chatRoomInProgress && (
                     <div
                       className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
                        bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
                     >
                       {activeMenu ? 'Сховати меню' : 'Показати меню'}
                     </div>
-                  </button>
-                  <button
-                    className="icon-style button-wrapper"
-                    onClick={openFileInput}
-                  >
-                    <input
-                      type="file"
-                      style={{ display: 'none' }}
-                      onChange={handleFileChange}
-                      ref={fileInputRef}
-                    />
-                    <AttachIcon />
+                  )}
+                </button>
+                <button
+                  className="icon-style button-wrapper"
+                  onClick={openFileInput}
+                  disabled={!fromChatPage || !chatRoomInProgress}
+                >
+                  <input
+                    type="file"
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                  />
+                  <AttachIcon
+                    fromChatPage={fromChatPage}
+                    chatRoomInProgress={chatRoomInProgress}
+                  />
+                  {fromChatPage && chatRoomInProgress && (
                     <div
                       className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
                        bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
                     >
                       Прикріпити фото .jpg, .jpeg, .png, .gif
                     </div>
-                  </button>
-                </>
-              )}
-              {(fileSelected || message) && (
-                <button
-                  type="submit"
-                  className="icon-style button-wrapper z-10"
-                  onClick={
-                    message && fileSelected
-                      ? () => {
-                          handleSubmitMessage();
-                          sendFileToServer();
-                        }
-                      : message
-                      ? handleSubmitMessage
-                      : sendFileToServer
-                  }
-                >
-                  <SendIcon />
-                  <div
-                    className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
-                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
-                  >
-                    Відправити повідомлення
-                  </div>
+                  )}
                 </button>
-              )}
-              {temporaryImageURL && (
-                <div className="ml-s py-sPlus">
-                  <div className="relative">
-                    <img
-                      className="border-1 border-solid border-borderDefault rounded-minimal"
-                      src={temporaryImageURL}
-                      alt="Uploaded Image"
-                    />
-                    <button
-                      className="absolute top-[-8px] left-[242px] border-1 bg-bgWhite border-solid
+              </>
+            )}
+            {(fileSelected || message) && (
+              <button
+                type="submit"
+                className="icon-style button-wrapper z-10"
+                onClick={
+                  message && fileSelected
+                    ? () => {
+                        handleSubmitMessage();
+                        sendFileToServer();
+                      }
+                    : message
+                    ? handleSubmitMessage
+                    : sendFileToServer
+                }
+              >
+                <SendIcon />
+                <div
+                  className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
+                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
+                >
+                  Відправити повідомлення
+                </div>
+              </button>
+            )}
+            {temporaryImageURL && (
+              <div className="ml-s py-sPlus">
+                <div className="relative">
+                  <img
+                    className="border-1 border-solid border-borderDefault rounded-minimal"
+                    src={temporaryImageURL}
+                    alt="Uploaded Image"
+                  />
+                  <button
+                    className="absolute top-[-8px] left-[242px] border-1 bg-bgWhite border-solid
                                border-borderDefault rounded-[50%] cursor-pointer hover:bg-bgHoverGrey
                                hover:border-borderHover transition-colors duration-300"
-                      onClick={() => {
-                        setTemporaryImageURL(null);
-                        setFileSelected(false);
-                      }}
-                    >
-                      <CloseIcon />
-                    </button>
-                  </div>
+                    onClick={() => {
+                      setTemporaryImageURL(null);
+                      setFileSelected(false);
+                    }}
+                  >
+                    <CloseIcon />
+                  </button>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
           {activeMenu && (
             <div className="flex gap-xs py-xs justify-center fade-in">
               <button
@@ -324,14 +347,15 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
                             focus:outline-none min-w-[150px] h-[48px]  py-xs leading-6 
                             ${isTablet ? 'px-m' : 'px-s'}
                             ${
+                              fromChatPage &&
                               chatRoomInProgress &&
                               'bg-bgDefaultDestructive text-textContrast hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus'
                             }
                             ${
-                              !chatRoomInProgress &&
-                              'bg-bgDisable text-textDisabled border-solid  border-1 border-borderDisabled cursor-not-allowed hover:bg-bgDisable'
+                              (!fromChatPage || !chatRoomInProgress) &&
+                              'bg-bgDisable text-textDisabled border-solid border-1 border-borderDisabled cursor-not-allowed pointer-events-none'
                             }`}
-                disabled={!chatRoomInProgress}
+                disabled={!fromChatPage || !chatRoomInProgress}
                 onClick={() => isOpenModal()}
               >
                 Завершити діалог
@@ -346,7 +370,7 @@ export const Footer = ({ isActiveMenu, isOpenModal, isTablet }) => {
 
 Footer.propTypes = {
   isActiveMenu: PropTypes.bool.isRequired,
-  isOpenModal: PropTypes.func.isRequired,
-  onFinishChat: PropTypes.func,
+  isOpenModal: PropTypes.func,
   isTablet: PropTypes.bool.isRequired,
+  fromChatPage: PropTypes.bool,
 };

@@ -8,29 +8,15 @@ textarea::placeholder {
   border-borderDefault focus:border-borderDefault focus:shadow-btFocus;
 }
 
+.input-style-disabled {
+  @apply p-xs pr-xl4 w-full outline-none border-t-1 border-solid
+  border-borderDefault leading-none resize-none;
+}
+
 .input-style::-webkit-resizer {
   @apply outline-none;
 }
 
 .icon-style {
   @apply absolute right-xs top-[45%] transform -translate-y-[50%];
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in {
-  animation: fade-in 500ms ease forwards;
-}
-
-.button-wrapper:hover .description {
-  display: block;
 }

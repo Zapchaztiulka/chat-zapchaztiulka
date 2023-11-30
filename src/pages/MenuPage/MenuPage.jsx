@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 
-import './styles.css';
+import '@/index.css';
 import { MessageCard } from '@/components/MessageCard';
 import { Container } from '@/utils';
 import { welcomeChatBot } from '@/helpers';

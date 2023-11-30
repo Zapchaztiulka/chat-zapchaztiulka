@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Loader } from './components/Loader';
 import { Header } from './components/Header';
+import { FAQDetails } from './components/FAQDetails';
 
 const MenuPage = lazy(() => import('./pages/MenuPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
@@ -15,6 +16,7 @@ const ChatPage = lazy(() => import('./pages/ChatPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 import { authUser } from './redux/chat/operations';
+import { getQuestionGroups } from './redux/faq/operations';
 import { selectChat } from './redux/chat/selectors';
 
 export const App = () => {
@@ -39,13 +41,22 @@ export const App = () => {
     dispatch(authUser(userId));
   }, [dispatch, existingChat._id, location.search]);
 
+  // fetch all faqs
+  useEffect(() => {
+    dispatch(getQuestionGroups());
+  }, [dispatch]);
+
   return (
     <>
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Header />}>
             <Route index element={<MenuPage />} />
-            <Route path="/faq" element={<FAQPage />} />
+            <Route path="/faq" element={<FAQPage isTablet={isTablet} />} />
+            <Route
+              path="/faq/:id"
+              element={<FAQDetails isTablet={isTablet} />}
+            />
             <Route path="/order-details" element={<OrderDetailsPage />} />
             <Route path="/chat" element={<ChatPage isTablet={isTablet} />} />
           </Route>
