@@ -298,7 +298,6 @@ export const ChatPage = ({ isTablet }) => {
         isActiveMenu={isActiveMenu}
         isOpenModal={handleOpenModal}
         isTablet={isTablet}
-        fromChatPage
       />
     </div>
   );

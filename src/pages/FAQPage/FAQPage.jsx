@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 
 import '@/index.css';
@@ -11,8 +12,16 @@ import { Container } from '@/utils';
 import { welcomeFAQ } from '@/helpers';
 
 import { selectQuestionGroups } from '@/redux/faq/selectors';
+import { getQuestionGroups } from '@/redux/faq/operations';
 
 export const FAQPage = ({ isTablet }) => {
+  const dispatch = useDispatch();
+
+  // fetch all faqs
+  useEffect(() => {
+    dispatch(getQuestionGroups());
+  }, [dispatch]);
+
   const faqs = useSelector(selectQuestionGroups);
 
   return (

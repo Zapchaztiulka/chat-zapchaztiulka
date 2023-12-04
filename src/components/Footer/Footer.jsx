@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { socket } from '@/socket';
 
@@ -9,7 +9,7 @@ import './styles.css';
 import '@/index.css';
 import { MenuIcon, AttachIcon, SendIcon, CloseIcon } from '@/images/svg';
 import { Loader } from '@/components/Loader';
-import { compressAndResizeImage } from '@/helpers';
+import { compressAndResizeImage, patterns } from '@/helpers';
 
 import { sendFile } from '@/redux/chat/operations';
 import { selectChatRoomInProgress } from '@/redux/chat/selectors';
@@ -19,10 +19,14 @@ export const Footer = ({
   isActiveMenu,
   isOpenModal,
   isTablet,
-  fromChatPage,
+  handleUserQuery,
 }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const isDisabled = pathname.includes('faq');
+  const isChat = pathname.includes('chat');
+  const isOrderDetails = pathname.includes('order-details');
 
   const chatRoomInProgress = useSelector(selectChatRoomInProgress);
 
@@ -86,25 +90,39 @@ export const Footer = ({
 
   // handle a text message
   const handleSubmitMessage = () => {
-    if (message.trim() === '') return;
+    const pureMessage = message.trim();
+    if (pureMessage === '') return;
 
-    const messageData = {
-      userId,
-      roomId: chatRoomInProgress?._id,
-      message: {
-        messageOwner: 'user',
-        messageType: 'text',
-        messageText: message,
-      },
-    };
+    // handle to user text message in a chat room
+    if (!isOrderDetails) {
+      const messageData = {
+        userId,
+        roomId: chatRoomInProgress?._id,
+        message: {
+          messageOwner: 'user',
+          messageType: 'text',
+          messageText: pureMessage,
+        },
+      };
 
-    dispatch({
-      type: addMessage,
-      payload: messageData,
-    });
+      dispatch({
+        type: addMessage,
+        payload: messageData,
+      });
 
-    socket.emit('userMessage', messageData);
-    handleTyping(false); // if user sent a message, we assume that he has stopped typing
+      socket.emit('userMessage', messageData);
+      handleTyping(false); // if user sent a message - user stopped typing
+    }
+
+    // handle to user message (phone) as user request to receive order details
+    if (isOrderDetails) {
+      if (!patterns.phonePattern.test(pureMessage)) {
+        toast.error(patterns.phonePatternMessage);
+        return;
+      }
+
+      handleUserQuery(pureMessage);
+    }
 
     setMessage('');
     setRows(1);
@@ -218,9 +236,7 @@ export const Footer = ({
           <div className="relative items-center">
             <textarea
               className={`${
-                fromChatPage && chatRoomInProgress
-                  ? 'input-style'
-                  : 'input-style-disabled border-y-1'
+                !isDisabled ? 'input-style' : 'input-style-disabled border-y-1'
               }`}
               type="text"
               placeholder="Введіть ваше повідомлення"
@@ -230,7 +246,7 @@ export const Footer = ({
               onKeyDown={handleKeyDown}
               onFocus={handleFocus}
               onBlur={handleOnBlur}
-              disabled={!fromChatPage || !chatRoomInProgress}
+              disabled={isDisabled}
             />
             {!message && !fileSelected && (
               <>
@@ -239,14 +255,14 @@ export const Footer = ({
                   className="icon-style button-wrapper"
                   style={{ right: '44px' }}
                   onClick={toggleMenu}
-                  disabled={!fromChatPage || !chatRoomInProgress}
+                  disabled={!isChat || !chatRoomInProgress}
                 >
                   <MenuIcon
                     activeMenu={activeMenu}
-                    fromChatPage={fromChatPage}
+                    isDisabled={!isChat}
                     chatRoomInProgress={chatRoomInProgress}
                   />
-                  {fromChatPage && chatRoomInProgress && (
+                  {isChat && chatRoomInProgress && (
                     <div
                       className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
                        bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
@@ -258,7 +274,7 @@ export const Footer = ({
                 <button
                   className="icon-style button-wrapper"
                   onClick={openFileInput}
-                  disabled={!fromChatPage || !chatRoomInProgress}
+                  disabled={!isChat || !chatRoomInProgress}
                 >
                   <input
                     type="file"
@@ -267,10 +283,10 @@ export const Footer = ({
                     ref={fileInputRef}
                   />
                   <AttachIcon
-                    fromChatPage={fromChatPage}
+                    isDisabled={!isChat}
                     chatRoomInProgress={chatRoomInProgress}
                   />
-                  {fromChatPage && chatRoomInProgress && (
+                  {isChat && chatRoomInProgress && (
                     <div
                       className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
                        bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
@@ -347,15 +363,15 @@ export const Footer = ({
                             focus:outline-none min-w-[150px] h-[48px]  py-xs leading-6 
                             ${isTablet ? 'px-m' : 'px-s'}
                             ${
-                              fromChatPage &&
+                              isChat &&
                               chatRoomInProgress &&
                               'bg-bgDefaultDestructive text-textContrast hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus'
                             }
                             ${
-                              (!fromChatPage || !chatRoomInProgress) &&
+                              (!isChat || !chatRoomInProgress) &&
                               'bg-bgDisable text-textDisabled border-solid border-1 border-borderDisabled cursor-not-allowed pointer-events-none'
                             }`}
-                disabled={!fromChatPage || !chatRoomInProgress}
+                disabled={!isChat || !chatRoomInProgress}
                 onClick={() => isOpenModal()}
               >
                 Завершити діалог
@@ -372,5 +388,5 @@ Footer.propTypes = {
   isActiveMenu: PropTypes.bool.isRequired,
   isOpenModal: PropTypes.func,
   isTablet: PropTypes.bool.isRequired,
-  fromChatPage: PropTypes.bool,
+  handleUserQuery: PropTypes.func,
 };

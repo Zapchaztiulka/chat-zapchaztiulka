@@ -16,7 +16,6 @@ const ChatPage = lazy(() => import('./pages/ChatPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 import { authUser } from './redux/chat/operations';
-import { getQuestionGroups } from './redux/faq/operations';
 import { selectChat } from './redux/chat/selectors';
 
 export const App = () => {
@@ -41,11 +40,6 @@ export const App = () => {
     dispatch(authUser(userId));
   }, [dispatch, existingChat._id, location.search]);
 
-  // fetch all faqs
-  useEffect(() => {
-    dispatch(getQuestionGroups());
-  }, [dispatch]);
-
   return (
     <>
       <Suspense fallback={<Loader />}>
@@ -57,7 +51,10 @@ export const App = () => {
               path="/faq/:id"
               element={<FAQDetails isTablet={isTablet} />}
             />
-            <Route path="/order-details" element={<OrderDetailsPage />} />
+            <Route
+              path="/order-details"
+              element={<OrderDetailsPage isTablet={isTablet} />}
+            />
             <Route path="/chat" element={<ChatPage isTablet={isTablet} />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />

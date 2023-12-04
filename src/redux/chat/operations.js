@@ -15,6 +15,18 @@ export const authUser = createAsyncThunk(
   }
 );
 
+// export const getUser = createAsyncThunk(
+//   'chat/getUser',
+//   async (userId, thunkAPI) => {
+//     try {
+//       const { data } = await axios.get(`/users/${userId}`);
+//       return data;
+//     } catch (e) {
+//       return thunkAPI.rejectWithValue(e.message);
+//     }
+//   }
+// );
+
 export const createChatRoom = createAsyncThunk(
   'chat/createChatRoom',
   async (userId, thunkAPI) => {
