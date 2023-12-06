@@ -263,10 +263,7 @@ export const Footer = ({
                     chatRoomInProgress={chatRoomInProgress}
                   />
                   {isChat && chatRoomInProgress && (
-                    <div
-                      className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
-                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
-                    >
+                    <div className="description hidden absolute bottom-[100%] right-[0%] text-textContrast bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10">
                       {activeMenu ? 'Сховати меню' : 'Показати меню'}
                     </div>
                   )}
@@ -287,10 +284,7 @@ export const Footer = ({
                     chatRoomInProgress={chatRoomInProgress}
                   />
                   {isChat && chatRoomInProgress && (
-                    <div
-                      className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
-                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
-                    >
+                    <div className="description hidden absolute bottom-[100%] right-[0%] text-textContrast bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10">
                       Прикріпити фото .jpg, .jpeg, .png, .gif
                     </div>
                   )}
@@ -313,10 +307,7 @@ export const Footer = ({
                 }
               >
                 <SendIcon />
-                <div
-                  className="description hidden absolute bottom-[100%] right-[0%] text-textContrast 
-                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
-                >
+                <div className="description hidden absolute bottom-[100%] right-[0%] text-textContrast bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10">
                   Відправити повідомлення
                 </div>
               </button>
@@ -330,9 +321,7 @@ export const Footer = ({
                     alt="Uploaded Image"
                   />
                   <button
-                    className="absolute top-[-8px] left-[242px] border-1 bg-bgWhite border-solid
-                               border-borderDefault rounded-[50%] cursor-pointer hover:bg-bgHoverGrey
-                               hover:border-borderHover transition-colors duration-300"
+                    className="absolute top-[-8px] left-[242px] border-1 bg-bgWhite border-solid border-borderDefault rounded-[50%] cursor-pointer hover:bg-bgHoverGrey hover:border-borderHover transition-colors duration-300"
                     onClick={() => {
                       setTemporaryImageURL(null);
                       setFileSelected(false);
@@ -347,9 +336,7 @@ export const Footer = ({
           {activeMenu && (
             <div className="flex gap-xs py-xs justify-center fade-in">
               <button
-                className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors 
-                duration-300 focus:outline-none min-w-[150px] h-[48px] bg-bgWhite text-textBrand border-solid border-1
-                 border-borderDefaultBlue py-xs leading-6 hover:bg-bgHoverGrey focus:shadow-btFocus
+                className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300 focus:outline-none min-w-[150px] h-[48px] bg-bgWhite text-textBrand border-solid border-1 border-borderDefaultBlue py-xs leading-6 hover:bg-bgHoverGrey focus:shadow-btFocus
                  ${
                    chatRoomInProgress?.isChatRoomProcessed &&
                    'text-textDisabled border-borderDisabled bg-bgDisable cursor-not-allowed pointer-events-none'

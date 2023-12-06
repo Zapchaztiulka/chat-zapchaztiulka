@@ -22,10 +22,7 @@ export const Header = () => {
           <div className="title">Онлайн підтримка</div>
           <button className="button-wrapper" onClick={toggleChat}>
             <ArrowDownIcon />
-            <div
-              className="description hidden absolute top-[65%] left-[65%] text-textContrast 
-                       bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10"
-            >
+            <div className="description hidden absolute top-[65%] left-[65%] text-textContrast bg-bgGreyDark p-xs2 rounded-medium whitespace-nowrap z-10">
               Згорнути чат
             </div>
           </button>

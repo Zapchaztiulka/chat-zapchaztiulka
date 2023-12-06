@@ -135,9 +135,7 @@ export const OrderDetailsPage = ({ isTablet }) => {
                               {"З'явилися запитання?"}
                             </p>
                             <button
-                              className="p-xs2 text-caption font-500 text-textBrand border-solid border-1
-                             border-borderDefaultBlue bg-bgWhite hover:bg-bgHoverGrey focus:shadow-btFocus 
-                             rounded-medium transition-colors duration-300 focus:outline-none whitespace-nowrap"
+                              className="p-xs2 text-caption font-500 text-textBrand border-solid border-1 border-borderDefaultBlue bg-bgWhite hover:bg-bgHoverGrey focus:shadow-btFocus rounded-medium transition-colors duration-300 focus:outline-none whitespace-nowrap"
                               onClick={() => navigate('/chat')}
                             >
                               {"З'єднати з менеджером"}
@@ -155,13 +153,9 @@ export const OrderDetailsPage = ({ isTablet }) => {
             <Button
               buttonType="desctructive"
               // delete className after adjusting to get button from universal components
-              className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors
-                       duration-300 focus:outline-none min-w-[150px] text-textContrast bg-bgDefaultDestructive
-                       py-xs leading-6 hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive 
-                       focus:shadow-btFocus disabled:border-solid  disabled:border-1 disabled:border-borderDisabled
-                     active:bg-bgPressedDestructive h-[48px] ${
-                       isTablet ? 'px-m' : 'px-s'
-                     }`}
+              className={`font-500 rounded-medium flex justify-center items-center gap-xs2 transition-colors duration-300 focus:outline-none min-w-[150px] text-textContrast bg-bgDefaultDestructive py-xs leading-6 hover:bg-bgHoverDestructive focus:bg-bgDefaultDestructive focus:shadow-btFocus disabled:border-solid  disabled:border-1 disabled:border-borderDisabled active:bg-bgPressedDestructive h-[48px] ${
+                isTablet ? 'px-m' : 'px-s'
+              }`}
               text="Надіслати на e-mail"
               onClick={() => setIsOpenModal(true)}
             />

@@ -1,6 +1,5 @@
 .header-wrapper {
-  @apply sticky flex gap-xs2 top-[0] left-[0] z-20 items-center 
-         mx-auto py-xs2 px-m w-screen bg-bgBrandDark;
+  @apply sticky flex gap-xs2 top-[0] left-[0] z-20 items-center mx-auto py-xs2 px-m w-screen bg-bgBrandDark;
 }
 
 .logo-wrapper {

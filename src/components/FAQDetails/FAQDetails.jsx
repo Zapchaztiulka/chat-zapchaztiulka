@@ -61,9 +61,7 @@ export const FAQDetails = ({ isTablet }) => {
                             {'Не знайшли відповідь на запитання?'}
                           </p>
                           <button
-                            className="p-xs2 text-caption font-500 text-textBrand border-solid border-1
-                             border-borderDefaultBlue bg-bgWhite hover:bg-bgHoverGrey focus:shadow-btFocus 
-                             rounded-medium transition-colors duration-300 focus:outline-none "
+                            className="p-xs2 text-caption font-500 text-textBrand border-solid border-1 border-borderDefaultBlue bg-bgWhite hover:bg-bgHoverGrey focus:shadow-btFocus rounded-medium transition-colors duration-300 focus:outline-none "
                             onClick={() => navigate('/chat')}
                           >
                             {"З'єднати з менеджером"}
