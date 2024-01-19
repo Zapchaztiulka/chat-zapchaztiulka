@@ -190,6 +190,18 @@ export const ChatPage = ({ isTablet }) => {
     };
   }, [chatRoomInProgress, dispatch]);
 
+  // automatic scroll when new message is added
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      const scrollHeight = messageContainerRef.current.scrollHeight;
+      const maxVisibleHeight = messageContainerRef.current.clientHeight;
+
+      if (scrollHeight > maxVisibleHeight) {
+        messageContainerRef.current.scrollTop = scrollHeight - maxVisibleHeight;
+      }
+    }
+  }, [chatRoomInProgress, isTyping]);
+
   // handle closing of chat room
   const handleCloseChat = () => {
     if (chatRoomInProgress) {
@@ -210,18 +222,6 @@ export const ChatPage = ({ isTablet }) => {
 
   // handle to open modal window to approve of closing chat
   const handleOpenModal = () => setIsOpenModal(true);
-
-  // automatic scroll when new message is added
-  useEffect(() => {
-    if (messageContainerRef.current) {
-      const scrollHeight = messageContainerRef.current.scrollHeight;
-      const maxVisibleHeight = messageContainerRef.current.clientHeight;
-
-      if (scrollHeight > maxVisibleHeight) {
-        messageContainerRef.current.scrollTop = scrollHeight - maxVisibleHeight;
-      }
-    }
-  }, [chatRoomInProgress, isTyping]);
 
   // not render if user is not authenticated
   if (!isAuthenticated) {

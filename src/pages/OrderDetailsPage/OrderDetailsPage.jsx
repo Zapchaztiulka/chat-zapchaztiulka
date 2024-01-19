@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import theme from '../../../presets';
 import '@/index.css';
-import { Button } from 'universal-components-frontend/src/components';
+// import { Button } from 'universal-components-frontend/src/components';
 import { MessageCard } from '@/components/MessageCard';
 import { Footer } from '@/components/Footer';
 import { BtnLoader } from '@/components/Loader';
@@ -18,14 +18,12 @@ import {
   selectOrderDetails,
 } from '@/redux/orderDetails/selectors';
 
-// import { getUser } from '@/redux/chat/operations';
-
 export const OrderDetailsPage = ({ isTablet }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [userQuery, setUserQuery] = useState(null);
   const [openOrderId, setOpenOrderId] = useState(null);
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  // const [isOpenModal, setIsOpenModal] = useState(false);
   const orders = useSelector(selectOrderDetails);
   const isLoading = useSelector(selectIsLoading);
 
@@ -57,7 +55,7 @@ export const OrderDetailsPage = ({ isTablet }) => {
               color={theme.colors.bgGreyDark}
             />
           )}
-          {orders && orders?.length > 0 && !isLoading && (
+          {orders && orders.length > 0 && !isLoading && (
             <>
               <MessageCard type="text" text="Ваші замовлення:" />
               <div className="flex flex-col gap-xs text-textPrimary text-body">
@@ -149,7 +147,7 @@ export const OrderDetailsPage = ({ isTablet }) => {
               </div>
             </>
           )}
-          {orders?.length > 0 && (
+          {/* {orders && orders.length > 0 && (
             <Button
               buttonType="desctructive"
               // delete className after adjusting to get button from universal components
@@ -158,6 +156,12 @@ export const OrderDetailsPage = ({ isTablet }) => {
               }`}
               text="Надіслати на e-mail"
               onClick={() => setIsOpenModal(true)}
+            />
+          )} */}
+          {orders && orders.length === 0 && (
+            <MessageCard
+              type="text"
+              text={`За телефоном ${userQuery} замовлень не знайдено. Спробуйте інший телефон`}
             />
           )}
         </section>

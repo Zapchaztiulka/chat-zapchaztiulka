@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import theme from '../../../presets';
+import theme from '../../../../presets';
 import '@/index.css';
 import { MessageCard } from '@/components/MessageCard';
 import { Footer } from '@/components/Footer';

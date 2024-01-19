@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Loader } from './components/Loader';
 import { Header } from './components/Header';
-import { FAQDetails } from './components/FAQDetails';
+import { FAQDetails } from './components/FAQ/FAQDetails';
 
 const MenuPage = lazy(() => import('./pages/MenuPage'));
 const FAQPage = lazy(() => import('./pages/FAQPage'));
