@@ -158,7 +158,7 @@ export const OrderDetailsPage = ({ isTablet }) => {
               onClick={() => setIsOpenModal(true)}
             />
           )} */}
-          {orders && orders.length === 0 && (
+          {orders && orders.length === 0 && userQuery && (
             <MessageCard
               type="text"
               text={`За телефоном ${userQuery} замовлень не знайдено. Спробуйте інший телефон`}
